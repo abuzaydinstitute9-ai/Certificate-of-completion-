@@ -1,0 +1,1805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Certificate Platform — Abu Zayd Solutions</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+:root {
+  --emerald: #0d5c3a;
+  --emerald-dark: #083d27;
+  --emerald-mid: #1a7a50;
+  --emerald-light: #e8f5ee;
+  --emerald-pale: #f0faf5;
+  --gold: #b8860b;
+  --gold-light: #f5e6a3;
+  --gold-pale: #fdf8e7;
+  --gold-bright: #c9960e;
+  --navy: #1a2240;
+  --navy-mid: #2d3a5e;
+  --text-dark: #1a2e1f;
+  --text-mid: #3d5c47;
+  --text-muted: #7a9c85;
+  --bg: #f7faf8;
+  --bg-card: #ffffff;
+  --border: #cce5d8;
+  --border-light: #e5f2eb;
+  --shadow: 0 2px 16px rgba(13,92,58,0.08);
+  --shadow-hover: 0 8px 32px rgba(13,92,58,0.15);
+  --radius: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 22px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text-dark); min-height: 100vh; font-family: 'DM Sans', sans-serif; font-size: 15px; line-height: 1.6; overflow-x: hidden; }
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--emerald-light); }
+::-webkit-scrollbar-thumb { background: var(--emerald-mid); border-radius: 4px; }
+
+/* ===== PAGE SYSTEM ===== */
+.page { display: none; min-height: 100vh; }
+.page.active { display: block; }
+#page-login.active, #page-register.active { display: flex; }
+#page-dashboard.active { display: flex; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.page.active { animation: fadeUp 0.32s ease; }
+
+/* ===== HOME NAV ===== */
+.home-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(255,255,255,0.97); backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border-light);
+  padding: 0 2rem; height: 62px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-logo { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+.nav-logo-icon {
+  width: 38px; height: 38px; background: var(--emerald); border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Amiri', serif; color: var(--gold-light); font-size: 20px;
+}
+.nav-logo-text { font-weight: 700; color: var(--emerald-dark); font-size: 14px; line-height: 1.2; }
+.nav-logo-sub { font-size: 11px; color: var(--text-muted); font-weight: 400; }
+.nav-links { display: flex; align-items: center; gap: 8px; }
+.nav-btn {
+  padding: 8px 20px; border-radius: 8px; font-size: 14px; font-weight: 600;
+  cursor: pointer; border: none; transition: all 0.2s; font-family: 'DM Sans', sans-serif;
+}
+.nav-btn.ghost { background: transparent; color: var(--emerald); border: 1.5px solid var(--border); }
+.nav-btn.ghost:hover { background: var(--emerald-light); }
+.nav-btn.solid { background: var(--emerald); color: white; }
+.nav-btn.solid:hover { background: var(--emerald-dark); }
+
+/* ===== HERO ===== */
+.hero {
+  padding: 130px 2rem 80px; text-align: center;
+  background: linear-gradient(160deg, #f7faf8 0%, #f0faf5 50%, #fdf8e7 100%);
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; top: -80px; right: -80px;
+  width: 400px; height: 400px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(13,92,58,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero::after {
+  content: ''; position: absolute; bottom: -60px; left: -60px;
+  width: 300px; height: 300px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(184,134,11,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--emerald-light); color: var(--emerald);
+  font-size: 11.5px; font-weight: 700; letter-spacing: 0.5px;
+  padding: 5px 14px; border-radius: 100px; margin-bottom: 1.25rem;
+  border: 1px solid var(--border);
+}
+.hero-arabic {
+  font-family: 'Amiri', serif; font-size: 2rem; color: var(--gold);
+  margin-bottom: 0.75rem; display: block;
+}
+.hero h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.2rem, 5vw, 3.6rem); font-weight: 700;
+  color: var(--emerald-dark); line-height: 1.18;
+  margin-bottom: 1rem; max-width: 680px; margin-left: auto; margin-right: auto;
+}
+.hero h1 em { font-style: italic; color: var(--gold); }
+.hero p {
+  font-size: 1.05rem; color: var(--text-mid); max-width: 540px;
+  margin: 0 auto 2.25rem; line-height: 1.75;
+}
+.hero-certs-type {
+  display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.cert-type-pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 6px 14px; border-radius: 100px;
+  font-size: 12.5px; font-weight: 600; border: 1.5px solid;
+}
+.cert-type-pill.quran { background: var(--emerald-pale); color: var(--emerald); border-color: var(--border); }
+.cert-type-pill.school { background: #eef2ff; color: #3b5bdb; border-color: #c5d2ff; }
+.hero-buttons { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 4rem; }
+.btn-hero { padding: 13px 30px; border-radius: 10px; font-size: 15px; font-weight: 700; border: none; cursor: pointer; transition: all 0.22s; font-family: 'DM Sans', sans-serif; }
+.btn-hero.primary { background: var(--emerald); color: white; }
+.btn-hero.primary:hover { background: var(--emerald-dark); transform: translateY(-1px); box-shadow: 0 8px 28px rgba(13,92,58,0.28); }
+.btn-hero.secondary { background: white; color: var(--emerald); border: 2px solid var(--border); }
+.btn-hero.secondary:hover { border-color: var(--emerald); background: var(--emerald-pale); }
+
+.cert-preview-wrapper { max-width: 760px; margin: 0 auto 5rem; padding: 0 1rem; }
+.cert-preview-label { font-size: 11px; font-weight: 700; color: var(--text-muted); letter-spacing: 1.2px; text-transform: uppercase; text-align: center; margin-bottom: 1rem; }
+
+/* Features */
+.features-section { padding: 80px 2rem; max-width: 1100px; margin: 0 auto; }
+.section-header { text-align: center; margin-bottom: 3rem; }
+.section-label { font-size: 11.5px; font-weight: 700; color: var(--emerald); letter-spacing: 1px; text-transform: uppercase; display: block; margin-bottom: 0.5rem; }
+.section-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 700; color: var(--emerald-dark); }
+.features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; }
+.feature-card {
+  background: white; border-radius: var(--radius-lg); padding: 1.6rem;
+  border: 1px solid var(--border-light); transition: all 0.25s;
+}
+.feature-card:hover { border-color: var(--emerald); box-shadow: var(--shadow-hover); transform: translateY(-2px); }
+.feature-icon { width: 46px; height: 46px; background: var(--emerald-light); border-radius: 11px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; font-size: 20px; }
+.feature-card h3 { font-weight: 700; font-size: 0.97rem; color: var(--text-dark); margin-bottom: 0.45rem; }
+.feature-card p { font-size: 0.88rem; color: var(--text-mid); line-height: 1.6; }
+
+/* Steps */
+.steps-section { background: var(--emerald-dark); padding: 80px 2rem; color: white; }
+.steps-inner { max-width: 900px; margin: 0 auto; }
+.steps-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.6rem, 3vw, 2.2rem); text-align: center; margin-bottom: 0.4rem; color: var(--gold-light); }
+.steps-sub { text-align: center; color: rgba(255,255,255,0.6); margin-bottom: 3rem; }
+.steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; }
+.step { text-align: center; }
+.step-num { width: 52px; height: 52px; border-radius: 50%; background: rgba(184,134,11,0.22); border: 2px solid var(--gold); color: var(--gold-light); font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 700; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; }
+.step h3 { font-weight: 700; margin-bottom: 0.4rem; color: white; }
+.step p { font-size: 0.88rem; color: rgba(255,255,255,0.6); }
+
+/* Footer */
+.home-footer { background: var(--text-dark); color: rgba(255,255,255,0.45); text-align: center; padding: 2rem; font-size: 0.85rem; }
+.home-footer a { color: var(--gold-light); text-decoration: none; }
+
+/* ===== AUTH ===== */
+#page-login, #page-register {
+  min-height: 100vh; background: var(--emerald-dark);
+  align-items: center; justify-content: center; padding: 2rem;
+}
+.auth-card { background: white; border-radius: var(--radius-xl); padding: 2.5rem; width: 100%; max-width: 460px; box-shadow: 0 28px 80px rgba(0,0,0,0.3); }
+.auth-logo { text-align: center; margin-bottom: 2rem; }
+.auth-logo-icon { width: 56px; height: 56px; background: var(--emerald); border-radius: 13px; display: flex; align-items: center; justify-content: center; font-family: 'Amiri', serif; color: var(--gold-light); font-size: 26px; margin: 0 auto 0.8rem; }
+.auth-logo h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; color: var(--emerald-dark); font-weight: 700; }
+.auth-logo p { font-size: 0.85rem; color: var(--text-muted); }
+.auth-title { font-weight: 700; font-size: 1.25rem; color: var(--text-dark); margin-bottom: 0.25rem; }
+.auth-sub { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.75rem; }
+.form-group { margin-bottom: 1.1rem; }
+.form-label { font-size: 13px; font-weight: 600; color: var(--text-mid); display: block; margin-bottom: 0.4rem; }
+.form-input, .form-select, .form-textarea {
+  width: 100%; padding: 10px 13px; border: 1.5px solid var(--border);
+  border-radius: 8px; font-size: 14px; font-family: 'DM Sans', sans-serif;
+  color: var(--text-dark); background: white; outline: none; transition: border-color 0.2s;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--emerald); }
+.form-textarea { resize: vertical; min-height: 80px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+.btn-full { width: 100%; padding: 13px; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; border: none; font-family: 'DM Sans', sans-serif; transition: all 0.2s; }
+.btn-full.primary { background: var(--emerald); color: white; }
+.btn-full.primary:hover { background: var(--emerald-dark); }
+.auth-link { text-align: center; margin-top: 1.25rem; font-size: 13px; color: var(--text-muted); }
+.auth-link a { color: var(--emerald); font-weight: 600; cursor: pointer; }
+
+/* ===== DASHBOARD ===== */
+#page-dashboard { display: none; min-height: 100vh; background: var(--bg); }
+#page-dashboard.active { display: flex; }
+.sidebar {
+  width: 240px; min-height: 100vh; background: var(--emerald-dark);
+  flex-shrink: 0; display: flex; flex-direction: column;
+  position: fixed; top: 0; left: 0; bottom: 0; z-index: 50; transition: transform 0.3s;
+}
+.sidebar-header { padding: 1.4rem 1.2rem 1.2rem; border-bottom: 1px solid rgba(255,255,255,0.09); }
+.sidebar-logo { display: flex; align-items: center; gap: 10px; }
+.sidebar-logo-icon { width: 36px; height: 36px; background: rgba(184,134,11,0.2); border: 1px solid var(--gold); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Amiri', serif; color: var(--gold-light); font-size: 17px; }
+.sidebar-logo-name { font-weight: 700; color: white; font-size: 13.5px; line-height: 1.2; }
+.sidebar-logo-sub { font-size: 10.5px; color: rgba(255,255,255,0.38); }
+.sidebar-inst { padding: 0.9rem 1.2rem; border-bottom: 1px solid rgba(255,255,255,0.07); }
+.sidebar-inst-name { font-size: 12.5px; font-weight: 700; color: var(--gold-light); margin-bottom: 1px; }
+.sidebar-inst-sub { font-size: 11px; color: rgba(255,255,255,0.38); }
+.sidebar-nav { padding: 1rem 0.7rem; flex: 1; }
+.nav-section-label { font-size: 9.5px; font-weight: 700; letter-spacing: 1.2px; color: rgba(255,255,255,0.28); text-transform: uppercase; padding: 0 0.5rem; margin: 1rem 0 0.4rem; }
+.nav-item {
+  display: flex; align-items: center; gap: 9px; padding: 8px 11px; border-radius: 7px;
+  color: rgba(255,255,255,0.6); font-size: 13.5px; font-weight: 500;
+  cursor: pointer; transition: all 0.2s; margin-bottom: 2px; text-decoration: none; list-style: none;
+}
+.nav-item:hover { background: rgba(255,255,255,0.08); color: white; }
+.nav-item.active { background: rgba(255,255,255,0.12); color: white; font-weight: 700; }
+.nav-item.active .nav-icon { color: var(--gold-light); }
+.nav-icon { font-size: 15px; width: 20px; text-align: center; flex-shrink: 0; }
+.sidebar-footer { padding: 1rem 1.2rem; border-top: 1px solid rgba(255,255,255,0.07); }
+.sidebar-footer-text { font-size: 10.5px; color: rgba(255,255,255,0.25); text-align: center; }
+.main-content { margin-left: 240px; flex: 1; min-height: 100vh; display: flex; flex-direction: column; }
+.topbar {
+  background: white; border-bottom: 1px solid var(--border-light);
+  padding: 0 2rem; height: 58px; display: flex; align-items: center;
+  justify-content: space-between; position: sticky; top: 0; z-index: 40;
+}
+.topbar-title { font-weight: 700; font-size: 0.97rem; color: var(--text-dark); }
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+.topbar-user { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-mid); cursor: pointer; }
+.topbar-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--emerald-light); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: var(--emerald); }
+.content-area { padding: 1.75rem; flex: 1; }
+.dash-tab { display: none; }
+.mobile-menu-btn { display: none; background: none; border: none; cursor: pointer; font-size: 22px; color: var(--text-dark); padding: 4px; }
+@media (max-width: 768px) { .mobile-menu-btn { display: block; } .sidebar { transform: translateX(-100%); } .sidebar.open { transform: translateX(0); } .main-content { margin-left: 0; } .form-row { grid-template-columns: 1fr; } }
+.sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 49; }
+.sidebar-overlay.active { display: block; }
+
+/* ===== STATS ===== */
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 1.75rem; }
+.stat-card { background: white; border-radius: var(--radius); padding: 1.2rem; border: 1px solid var(--border-light); }
+.stat-label { font-size: 11px; color: var(--text-muted); font-weight: 700; margin-bottom: 0.35rem; text-transform: uppercase; letter-spacing: 0.5px; }
+.stat-value { font-size: 2rem; font-weight: 700; color: var(--text-dark); line-height: 1.15; font-family: 'Cormorant Garamond', serif; }
+.stat-delta { font-size: 11.5px; color: var(--emerald); margin-top: 0.2rem; }
+
+/* Cards */
+.section-card { background: white; border-radius: var(--radius-lg); border: 1px solid var(--border-light); margin-bottom: 1.5rem; overflow: hidden; }
+.section-card-header { padding: 1rem 1.5rem; border-bottom: 1px solid var(--border-light); display: flex; align-items: center; justify-content: space-between; }
+.section-card-title { font-weight: 700; font-size: 0.93rem; color: var(--text-dark); }
+.section-card-body { padding: 1.2rem 1.5rem; }
+.activity-list { list-style: none; }
+.activity-item { display: flex; align-items: center; gap: 11px; padding: 0.7rem 0; border-bottom: 1px solid var(--border-light); }
+.activity-item:last-child { border-bottom: none; }
+.activity-avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--emerald-light); display: flex; align-items: center; justify-content: center; font-size: 11.5px; font-weight: 700; color: var(--emerald); flex-shrink: 0; }
+.activity-info { flex: 1; }
+.activity-name { font-weight: 600; font-size: 13.5px; color: var(--text-dark); }
+.activity-detail { font-size: 11.5px; color: var(--text-muted); }
+.activity-badge { font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 100px; background: var(--emerald-light); color: var(--emerald); }
+
+/* ===== CERT TYPE TABS ===== */
+.cert-type-tabs { display: flex; gap: 6px; margin-bottom: 1.2rem; }
+.ctype-tab {
+  flex: 1; padding: 10px 14px; border-radius: 9px; font-size: 13.5px; font-weight: 600;
+  cursor: pointer; border: 1.5px solid var(--border-light); background: white;
+  color: var(--text-muted); text-align: center; transition: all 0.2s; font-family: 'DM Sans', sans-serif;
+}
+.ctype-tab:hover { border-color: var(--emerald); color: var(--emerald); }
+.ctype-tab.active-quran { border-color: var(--emerald); background: var(--emerald-pale); color: var(--emerald); }
+.ctype-tab.active-school { border-color: #3b5bdb; background: #eef2ff; color: #3b5bdb; }
+
+/* ===== GENERATE LAYOUT ===== */
+.generate-layout { display: grid; grid-template-columns: 1fr 420px; gap: 1.5rem; }
+@media (max-width: 900px) { .generate-layout { grid-template-columns: 1fr; } }
+.gen-form-card, .gen-preview-card { background: white; border-radius: var(--radius-lg); border: 1px solid var(--border-light); }
+.gen-form-card { overflow: hidden; }
+.gen-form-header { padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--border-light); background: var(--emerald-pale); }
+.gen-form-header h2 { font-weight: 700; font-size: 1.02rem; color: var(--emerald-dark); }
+.gen-form-header p { font-size: 0.83rem; color: var(--text-muted); margin-top: 2px; }
+.gen-form-body { padding: 1.4rem; }
+.gen-preview-card { padding: 1.25rem; position: sticky; top: 75px; overflow: hidden; max-width: 100%; }
+.gen-preview-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 1rem; }
+#cert-preview-live { width: 100%; overflow: hidden; }
+#cert-preview-live > div { transform-origin: top left; }
+.form-divider { height: 1px; background: var(--border-light); margin: 1.2rem 0; }
+.form-section-title { font-size: 11.5px; font-weight: 700; color: var(--emerald); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.7rem; }
+.btn-generate {
+  width: 100%; padding: 13px; border-radius: 9px; font-size: 15px; font-weight: 700;
+  background: var(--emerald); color: white; border: none; cursor: pointer;
+  font-family: 'DM Sans', sans-serif; transition: all 0.2s; margin-top: 1rem;
+}
+.btn-generate:hover { background: var(--emerald-dark); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(13,92,58,0.28); }
+.btn-generate.school-mode { background: #3b5bdb; }
+.btn-generate.school-mode:hover { background: #2f4ac4; box-shadow: 0 8px 24px rgba(59,91,219,0.3); }
+
+/* ===== QURAN CERTIFICATE ===== */
+.certificate {
+  width: 100%; aspect-ratio: 1.414;
+  background: white; position: relative; overflow: hidden;
+  font-family: 'Cormorant Garamond', serif;
+  border: 2px solid var(--gold); border-radius: 3px;
+}
+.cert-outer-border { position: absolute; inset: 7px; border: 1px solid rgba(184,134,11,0.5); border-radius: 1px; pointer-events: none; }
+.cert-corner { position: absolute; width: 30px; height: 30px; border-color: var(--gold); border-style: solid; }
+.cert-corner.tl { top: 12px; left: 12px; border-width: 2px 0 0 2px; }
+.cert-corner.tr { top: 12px; right: 12px; border-width: 2px 2px 0 0; }
+.cert-corner.bl { bottom: 12px; left: 12px; border-width: 0 0 2px 2px; }
+.cert-corner.br { bottom: 12px; right: 12px; border-width: 0 2px 2px 0; }
+.cert-bg-pattern {
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(ellipse at 10% 90%, rgba(184,134,11,0.04) 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 10%, rgba(13,92,58,0.04) 0%, transparent 50%);
+  pointer-events: none;
+}
+.cert-inner { position: absolute; inset: 20px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 10px 28px; }
+.cert-top { width: 100%; display: flex; align-items: center; justify-content: center; gap: 14px; }
+.cert-inst-logo { width: 42px; height: 42px; border-radius: 7px; background: var(--emerald-light); display: flex; align-items: center; justify-content: center; font-family: 'Amiri', serif; font-size: 20px; color: var(--emerald); flex-shrink: 0; }
+.cert-inst-info { text-align: center; }
+.cert-inst-name { font-family: 'Cormorant Garamond', serif; font-size: 0.85em; font-weight: 700; color: var(--emerald-dark); }
+.cert-inst-phone { font-family: 'DM Sans', sans-serif; font-size: 0.58em; color: var(--text-muted); }
+.cert-divider { width: 80%; height: 1px; background: linear-gradient(to right, transparent, var(--gold), transparent); margin: 3px 0; }
+.cert-title-area { text-align: center; }
+.cert-title { font-family: 'Cormorant Garamond', serif; font-size: 0.95em; font-weight: 700; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; }
+.cert-arabic { font-family: 'Amiri', serif; font-size: 1.05em; color: var(--emerald); direction: rtl; }
+.cert-presented { font-family: 'DM Sans', sans-serif; font-size: 0.58em; color: var(--text-muted); margin-top: 3px; }
+.cert-student-name { font-family: 'Cormorant Garamond', serif; font-size: 1.35em; font-weight: 700; color: var(--emerald-dark); border-bottom: 1.5px solid var(--gold); padding-bottom: 2px; text-align: center; font-style: italic; }
+.cert-achievement-area { text-align: center; }
+.cert-for { font-family: 'DM Sans', sans-serif; font-size: 0.58em; color: var(--text-muted); }
+.cert-achievement { font-family: 'Cormorant Garamond', serif; font-size: 0.82em; font-weight: 700; color: var(--emerald); }
+.cert-message { font-family: 'Amiri', serif; font-size: 0.66em; color: var(--text-mid); text-align: center; max-width: 82%; line-height: 1.5; font-style: italic; }
+.cert-barakallah { font-family: 'Amiri', serif; font-size: 0.82em; color: var(--gold); }
+.cert-bottom { width: 100%; display: flex; align-items: flex-end; justify-content: space-between; }
+.cert-sig-area { text-align: center; }
+.cert-sig-line { width: 90px; height: 1px; background: var(--text-muted); margin: 0 auto 3px; }
+.cert-sig-name { font-family: 'DM Sans', sans-serif; font-size: 0.52em; font-weight: 700; color: var(--text-dark); }
+.cert-sig-label { font-family: 'DM Sans', sans-serif; font-size: 0.48em; color: var(--text-muted); }
+.cert-date-area { text-align: center; }
+.cert-date-val { font-family: 'DM Sans', sans-serif; font-size: 0.53em; color: var(--text-dark); font-weight: 600; }
+.cert-id-area { text-align: center; }
+.cert-id-val { font-family: 'DM Sans', sans-serif; font-size: 0.46em; color: var(--text-muted); }
+.cert-qr { width: 36px; height: 36px; border: 1px solid var(--border); border-radius: 2px; display: grid; grid-template-columns: repeat(5,1fr); gap: 1.5px; padding: 3px; margin: 0 auto 2px; }
+.cert-qr-cell { background: var(--text-dark); border-radius: 1px; }
+.cert-qr-cell.empty { background: transparent; }
+.cert-powered { font-family: 'DM Sans', sans-serif; font-size: 0.45em; color: var(--text-muted); text-align: center; width: 100%; }
+
+/* ===== SCHOOL CERTIFICATE ===== */
+.school-certificate {
+  width: 100%; aspect-ratio: 1.414;
+  background: white; position: relative; overflow: hidden;
+  font-family: 'Cormorant Garamond', serif;
+  border: 3px solid var(--navy); border-radius: 3px;
+}
+.school-cert-top-band { position: absolute; top: 0; left: 0; right: 0; height: 10px; background: linear-gradient(to right, var(--navy), #3b5bdb, var(--navy)); }
+.school-cert-bottom-band { position: absolute; bottom: 0; left: 0; right: 0; height: 6px; background: linear-gradient(to right, var(--gold), var(--gold-bright), var(--gold)); }
+.school-cert-left-bar { position: absolute; top: 10px; bottom: 6px; left: 0; width: 5px; background: linear-gradient(to bottom, #3b5bdb, var(--navy)); }
+.school-cert-right-bar { position: absolute; top: 10px; bottom: 6px; right: 0; width: 5px; background: linear-gradient(to bottom, #3b5bdb, var(--navy)); }
+.school-cert-bg { position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(59,91,219,0.025) 0%, transparent 60%); pointer-events: none; }
+.school-cert-corner-ornament { position: absolute; width: 40px; height: 40px; }
+.school-cert-corner-ornament.tl { top: 20px; left: 15px; }
+.school-cert-corner-ornament.tr { top: 20px; right: 15px; transform: scaleX(-1); }
+.school-cert-corner-ornament.bl { bottom: 18px; left: 15px; transform: scaleY(-1); }
+.school-cert-corner-ornament.br { bottom: 18px; right: 15px; transform: scale(-1); }
+.school-cert-inner { position: absolute; inset: 14px 14px 10px 14px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 8px 30px 10px; }
+.school-cert-header { width: 100%; display: flex; align-items: center; justify-content: center; gap: 14px; }
+.school-cert-logo { width: 46px; height: 46px; border-radius: 50%; background: linear-gradient(135deg, var(--navy), #3b5bdb); display: flex; align-items: center; justify-content: center; font-size: 20px; color: white; flex-shrink: 0; }
+.school-cert-school-info { text-align: center; }
+.school-cert-school-name { font-family: 'Cormorant Garamond', serif; font-size: 0.82em; font-weight: 700; color: var(--navy); letter-spacing: 0.5px; }
+.school-cert-school-sub { font-family: 'DM Sans', sans-serif; font-size: 0.52em; color: #5c6a8a; }
+.school-cert-divider { width: 85%; height: 1.5px; background: linear-gradient(to right, transparent, var(--navy), #3b5bdb, var(--navy), transparent); margin: 3px 0; }
+.school-cert-title-area { text-align: center; }
+.school-cert-title { font-family: 'Cormorant Garamond', serif; font-size: 0.9em; font-weight: 700; color: var(--navy); letter-spacing: 2.5px; text-transform: uppercase; }
+.school-cert-title-sub { font-family: 'DM Sans', sans-serif; font-size: 0.52em; color: #5c6a8a; margin-top: 2px; }
+.school-cert-presented { font-family: 'DM Sans', sans-serif; font-size: 0.55em; color: #7a8aaa; margin-top: 5px; }
+.school-cert-student-name { font-family: 'Cormorant Garamond', serif; font-size: 1.3em; font-weight: 700; color: var(--navy); border-bottom: 2px solid #3b5bdb; padding-bottom: 2px; text-align: center; font-style: italic; }
+.school-cert-achievement-area { text-align: center; }
+.school-cert-for { font-family: 'DM Sans', sans-serif; font-size: 0.55em; color: #7a8aaa; }
+.school-cert-subject { font-family: 'Cormorant Garamond', serif; font-size: 0.85em; font-weight: 700; color: #3b5bdb; }
+.school-cert-grade-area { display: flex; align-items: center; gap: 16px; }
+.school-cert-grade-badge { background: linear-gradient(135deg, var(--navy), #3b5bdb); color: white; border-radius: 50%; width: 50px; height: 50px; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; }
+.school-cert-grade-val { font-family: 'Cormorant Garamond', serif; font-size: 1em; font-weight: 700; line-height: 1; }
+.school-cert-grade-lbl { font-family: 'DM Sans', sans-serif; font-size: 0.35em; opacity: 0.8; }
+.school-cert-message { font-family: 'Cormorant Garamond', serif; font-size: 0.6em; color: #5c6a8a; text-align: center; max-width: 78%; line-height: 1.55; font-style: italic; }
+.school-cert-bottom { width: 100%; display: flex; align-items: flex-end; justify-content: space-between; }
+.school-cert-sig-area { text-align: center; }
+.school-cert-sig-line { width: 90px; height: 1px; background: var(--navy); margin: 0 auto 3px; }
+.school-cert-sig-name { font-family: 'DM Sans', sans-serif; font-size: 0.5em; font-weight: 700; color: var(--navy); }
+.school-cert-sig-label { font-family: 'DM Sans', sans-serif; font-size: 0.46em; color: #7a8aaa; }
+.school-cert-seal { width: 50px; height: 50px; border: 2px solid var(--navy); border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(59,91,219,0.05); }
+.school-cert-seal-text { font-family: 'DM Sans', sans-serif; font-size: 0.35em; font-weight: 700; color: var(--navy); text-align: center; line-height: 1.2; }
+.school-cert-powered { font-family: 'DM Sans', sans-serif; font-size: 0.43em; color: #aab0c0; text-align: center; width: 100%; }
+
+/* Action buttons */
+.cert-actions { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 0.8rem; }
+.cert-action-btn {
+  flex: 1; min-width: 90px; padding: 9px 11px; border-radius: 8px; font-size: 13px; font-weight: 600;
+  cursor: pointer; border: 1.5px solid var(--border); background: white;
+  color: var(--text-dark); font-family: 'DM Sans', sans-serif; transition: all 0.2s; text-align: center;
+}
+.cert-action-btn:hover { border-color: var(--emerald); color: var(--emerald); }
+.cert-action-btn.whatsapp { background: #25d366; color: white; border-color: #25d366; }
+.cert-action-btn.whatsapp:hover { background: #1da851; }
+.cert-action-btn.download { background: var(--emerald); color: white; border-color: var(--emerald); }
+.cert-action-btn.download:hover { background: var(--emerald-dark); }
+.cert-action-btn.download-school { background: #3b5bdb; color: white; border-color: #3b5bdb; }
+.cert-action-btn.download-school:hover { background: #2f4ac4; }
+.success-box { background: var(--emerald-pale); border: 1.5px solid var(--border); border-radius: 8px; padding: 0.7rem 0.9rem; margin-bottom: 0.8rem; font-size: 13px; color: var(--emerald-dark); }
+
+/* Students table */
+.table-wrapper { overflow-x: auto; }
+table.data-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.data-table th { background: var(--emerald-pale); color: var(--emerald-dark); font-weight: 700; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.5px; padding: 9px 13px; text-align: left; border-bottom: 2px solid var(--border); }
+.data-table td { padding: 11px 13px; border-bottom: 1px solid var(--border-light); color: var(--text-dark); }
+.data-table tr:hover td { background: var(--emerald-pale); }
+.badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 100px; }
+.badge.green { background: var(--emerald-light); color: var(--emerald); }
+.badge.blue { background: #eef2ff; color: #3b5bdb; }
+.badge.gold { background: var(--gold-pale); color: var(--gold); }
+.btn-sm { padding: 5px 11px; border-radius: 6px; font-size: 12px; font-weight: 600; border: 1.5px solid var(--border); background: white; color: var(--text-mid); cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; }
+.btn-sm:hover { border-color: var(--emerald); color: var(--emerald); }
+.btn-sm.primary { background: var(--emerald); color: white; border-color: var(--emerald); }
+.search-bar { display: flex; gap: 8px; margin-bottom: 1.2rem; }
+.search-input { flex: 1; padding: 9px 13px; border-radius: 8px; border: 1.5px solid var(--border); font-size: 14px; outline: none; font-family: 'DM Sans', sans-serif; color: var(--text-dark); transition: border-color 0.2s; }
+.search-input:focus { border-color: var(--emerald); }
+
+/* Quick actions */
+.quick-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.9rem; margin-top: 1rem; }
+.quick-action-btn { background: white; border: 1px solid var(--border-light); border-radius: 10px; padding: 14px; cursor: pointer; text-align: left; font-family: 'DM Sans', sans-serif; transition: all 0.2s; }
+.quick-action-btn:hover { border-color: var(--emerald); box-shadow: var(--shadow-hover); transform: translateY(-1px); }
+
+/* Verify */
+.verify-card { max-width: 500px; margin: 0 auto; }
+.verify-success { background: var(--emerald-light); border: 1.5px solid var(--emerald); border-radius: var(--radius-lg); padding: 1.5rem; text-align: center; margin-top: 1.5rem; }
+.verify-icon { font-size: 2.2rem; margin-bottom: 0.6rem; display: block; }
+.verify-row { display: flex; justify-content: space-between; padding: 0.55rem 0; border-bottom: 1px solid var(--border-light); align-items: center; font-size: 13.5px; }
+.verify-row:last-child { border-bottom: none; }
+.verify-label { font-size: 11.5px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+.verify-value { font-weight: 700; color: var(--text-dark); }
+
+/* Badge cards */
+.badges-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 1rem; }
+.badge-card { background: white; border-radius: var(--radius); border: 1px solid var(--border-light); padding: 1.2rem; text-align: center; transition: all 0.25s; }
+.badge-card:hover { border-color: var(--gold); box-shadow: 0 4px 16px rgba(184,134,11,0.12); }
+.badge-icon { font-size: 2rem; margin-bottom: 0.5rem; display: block; }
+.badge-name { font-size: 12px; font-weight: 700; color: var(--text-dark); }
+.badge-count { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+/* Wall */
+.wall-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem; }
+.wall-card { background: white; border-radius: var(--radius); border: 1px solid var(--border-light); padding: 1.2rem; position: relative; overflow: hidden; }
+.wall-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(to right, var(--emerald), var(--gold)); }
+.wall-card-name { font-weight: 700; font-size: 0.97rem; color: var(--text-dark); margin-bottom: 3px; }
+.wall-card-achievement { font-size: 0.86rem; color: var(--emerald); font-weight: 600; margin-bottom: 3px; }
+.wall-card-inst { font-size: 12px; color: var(--text-muted); }
+.wall-card-date { font-size: 11px; color: var(--text-muted); margin-top: 7px; }
+
+/* Settings */
+.settings-section { margin-bottom: 2rem; }
+.settings-title { font-weight: 700; font-size: 0.93rem; color: var(--text-dark); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-light); }
+
+/* Spinner */
+.spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.4); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 6px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Toast */
+.toast {
+  position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+  background: var(--emerald-dark); color: white; padding: 12px 20px;
+  border-radius: 10px; font-size: 14px; font-weight: 600;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25); transition: all 0.3s;
+  opacity: 0; transform: translateY(12px); pointer-events: none;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+
+/* Sub tabs */
+.sub-tabs { display: flex; gap: 4px; margin-bottom: 1.4rem; border-bottom: 2px solid var(--border-light); padding-bottom: 0; }
+.sub-tab { padding: 7px 15px; font-size: 13.5px; font-weight: 600; cursor: pointer; color: var(--text-muted); border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; border-radius: 5px 5px 0 0; }
+.sub-tab.active { color: var(--emerald); border-bottom-color: var(--emerald); }
+.sub-tab:hover:not(.active) { color: var(--text-mid); background: var(--emerald-pale); }
+
+/* Style picker */
+.style-picker-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; }
+.style-card { cursor: pointer; border-radius: 8px; border: 2px solid var(--border-light); overflow: hidden; transition: all 0.2s; text-align: center; background: white; }
+.style-card:hover { border-color: var(--emerald); }
+.style-card.active { border-color: var(--emerald); box-shadow: 0 0 0 2px var(--emerald-light); }
+.style-card-preview { height: 36px; width: 100%; }
+.style-card-name { font-size: 11px; font-weight: 700; color: var(--text-mid); padding: 4px 2px; }
+.style-card.active .style-card-name { color: var(--emerald); }
+
+/* Color theme swatches */
+.color-theme-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 0.5rem; }
+.color-theme-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.6px; }
+.color-swatch {
+  width: 26px; height: 26px; border-radius: 50%; cursor: pointer;
+  border: 2px solid transparent; outline: 2px solid transparent;
+  transition: all 0.18s; flex-shrink: 0;
+}
+.color-swatch:hover { transform: scale(1.15); }
+.color-swatch.active { border-color: white; outline-color: #333; outline-offset: 1px; transform: scale(1.15); }
+.color-swatch[title]::after { content: attr(title); }
+</style>
+</head>
+<body>
+
+<!-- ===== HOME PAGE ===== -->
+<div id="page-home" class="page active">
+  <nav class="home-nav">
+    <div class="nav-logo" onclick="showPage('home')">
+      <div class="nav-logo-icon">و</div>
+      <div>
+        <div class="nav-logo-text">Abu Zayd Solutions</div>
+        <div class="nav-logo-sub">Certificate Platform</div>
+      </div>
+    </div>
+    <div class="nav-links">
+      <button class="nav-btn ghost" onclick="showPage('login')">Sign In</button>
+      <button class="nav-btn solid" onclick="showPage('register')">Get Started</button>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-badge">✦ For Islamic Institutes &amp; Schools</div>
+    <span class="hero-arabic">بسم الله الرحمن الرحيم</span>
+    <h1>Celebrate Every <em>Learning</em> Milestone</h1>
+    <p>Generate beautiful, print-ready certificates for your students — Qur'ān achievements and school academic awards — in seconds.</p>
+    <div class="hero-certs-type">
+      <span class="cert-type-pill quran">🕌 Qur'ān Certificates</span>
+      <span class="cert-type-pill school">🎓 School Certificates</span>
+    </div>
+    <div class="hero-buttons">
+      <button class="btn-hero primary" onclick="showPage('register')">Create Institute Account</button>
+      <button class="btn-hero secondary" onclick="showPage('login')">Sign In</button>
+    </div>
+    <div class="cert-preview-wrapper">
+      <div class="cert-preview-label">Sample Certificate Preview</div>
+      <div id="sample-cert" style="border-radius:6px;overflow:hidden;box-shadow:0 20px 70px rgba(13,92,58,0.18);"></div>
+    </div>
+  </section>
+
+  <section class="features-section">
+    <div class="section-header">
+      <span class="section-label">Platform Features</span>
+      <h2 class="section-title">Everything Your Institute Needs</h2>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🕌</div>
+        <h3>Qur'ān Achievement Certs</h3>
+        <p>Beautiful Islamic certificates for Surah completions, Tajweed milestones, and Hifz achievements.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎓</div>
+        <h3>School Academic Certs</h3>
+        <p>Professional academic certificates for subject excellence, best student awards, and graduation.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⬇</div>
+        <h3>Instant PNG Download</h3>
+        <p>Download high-quality certificates as PNG files, ready to print or share digitally.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📱</div>
+        <h3>WhatsApp Sharing</h3>
+        <p>Share directly with parents on WhatsApp with one tap. No printing needed.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔐</div>
+        <h3>Unique Certificate ID</h3>
+        <p>Every certificate gets a unique ID for verification and authenticity confirmation.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3>Student Records</h3>
+        <p>Keep complete records of all certificates issued. Search and re-download anytime.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="steps-section">
+    <div class="steps-inner">
+      <h2 class="steps-title">How It Works</h2>
+      <p class="steps-sub">Generate a professional certificate in three simple steps</p>
+      <div class="steps-grid">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h3>Register Your Institute</h3>
+          <p>Create a free account with your institute name and contact details.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <h3>Choose Certificate Type</h3>
+          <p>Select Qur'ān or School certificate, fill student details and achievement.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <h3>Download &amp; Share</h3>
+          <p>Download the certificate instantly and share it via WhatsApp or print.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="home-footer">
+    <p>© 2025 <a href="#">Abu Zayd Solutions</a> · Powered by faith, built for teachers.</p>
+  </footer>
+</div>
+
+<!-- ===== LOGIN ===== -->
+<div id="page-login" class="page">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="auth-logo-icon">و</div>
+      <h2>Abu Zayd Solutions</h2>
+      <p>Certificate Platform</p>
+    </div>
+    <div class="auth-title">Welcome back</div>
+    <p class="auth-sub">Sign in to your institute account</p>
+    <div id="login-error" style="display:none;background:#fef2f2;border:1.5px solid #fca5a5;border-radius:8px;padding:10px 13px;font-size:13px;color:#b91c1c;margin-bottom:1rem;"></div>
+    <div class="form-group">
+      <label class="form-label">Institute Email *</label>
+      <input type="email" class="form-input" id="login-email" placeholder="info@institute.com">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Password *</label>
+      <input type="password" class="form-input" id="login-password" placeholder="Enter your password" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="btn-full primary" id="login-btn" onclick="doLogin()" style="margin-top:0.5rem;">Sign In</button>
+    <div class="auth-link">Don't have an account? <a onclick="showPage('register')">Register</a></div>
+    <div class="auth-link" style="margin-top:0.4rem;"><a onclick="showPage('home')">← Back to home</a></div>
+    <div style="margin-top:1.2rem;background:var(--emerald-pale);border-radius:8px;padding:10px 13px;font-size:12.5px;color:var(--text-mid);">
+      <strong>Demo credentials:</strong><br>Email: <code>info@noorulislam.com</code><br>Password: <code>password123</code>
+    </div>
+  </div>
+</div>
+
+<!-- ===== REGISTER ===== -->
+<div id="page-register" class="page">
+  <div class="auth-card" style="max-width:520px;">
+    <div class="auth-logo">
+      <div class="auth-logo-icon">و</div>
+      <h2>Abu Zayd Solutions</h2>
+      <p>Certificate Platform</p>
+    </div>
+    <div class="auth-title">Register Your Institute</div>
+    <p class="auth-sub">Create your free account to get started</p>
+    <div id="reg-error" style="display:none;background:#fef2f2;border:1.5px solid #fca5a5;border-radius:8px;padding:10px 13px;font-size:13px;color:#b91c1c;margin-bottom:1rem;"></div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Institute Name *</label>
+        <input type="text" class="form-input" id="reg-inst" placeholder="Noor ul-Islam Academy">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Director Name *</label>
+        <input type="text" class="form-input" id="reg-director" placeholder="Sheikh Ahmad Ali">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Email *</label>
+        <input type="email" class="form-input" id="reg-email" placeholder="info@institute.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Phone *</label>
+        <input type="tel" class="form-input" id="reg-phone" placeholder="+234 800 000 0000">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Password *</label>
+        <input type="password" class="form-input" id="reg-password" placeholder="Min. 6 characters">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Confirm Password *</label>
+        <input type="password" class="form-input" id="reg-confirm" placeholder="Repeat password" onkeydown="if(event.key==='Enter')doRegister()">
+      </div>
+    </div>
+    <button class="btn-full primary" id="reg-btn" onclick="doRegister()" style="margin-top:0.5rem;">Create Account</button>
+    <div class="auth-link">Already have an account? <a onclick="showPage('login')">Sign in</a></div>
+    <div class="auth-link" style="margin-top:0.4rem;"><a onclick="showPage('home')">← Back to home</a></div>
+  </div>
+</div>
+
+<!-- ===== DASHBOARD ===== -->
+<div id="page-dashboard" class="page">
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon">و</div>
+        <div>
+          <div class="sidebar-logo-name">Abu Zayd Solutions</div>
+          <div class="sidebar-logo-sub">Certificate Platform</div>
+        </div>
+      </div>
+    </div>
+    <div class="sidebar-inst">
+      <div class="sidebar-inst-name">Noor ul-Islam Academy</div>
+      <div class="sidebar-inst-sub">Lagos, Nigeria</div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Main</div>
+      <a class="nav-item active" id="nav-overview" onclick="showDashTab('overview')">
+        <span class="nav-icon">⊞</span> Dashboard
+      </a>
+      <a class="nav-item" id="nav-generate" onclick="showDashTab('generate')">
+        <span class="nav-icon">✦</span> Generate Certificate
+      </a>
+      <a class="nav-item" id="nav-students" onclick="showDashTab('students')">
+        <span class="nav-icon">◎</span> Student Records
+      </a>
+      <div class="nav-section-label">Features</div>
+      <a class="nav-item" id="nav-badges" onclick="showDashTab('badges')">
+        <span class="nav-icon">★</span> Digital Badges
+      </a>
+      <a class="nav-item" id="nav-wall" onclick="showDashTab('wall')">
+        <span class="nav-icon">◈</span> Achievement Wall
+      </a>
+      <a class="nav-item" id="nav-verify" onclick="showDashTab('verify')">
+        <span class="nav-icon">✓</span> Verify Certificate
+      </a>
+      <div class="nav-section-label">Account</div>
+      <a class="nav-item" id="nav-settings" onclick="showDashTab('settings')">
+        <span class="nav-icon">⚙</span> Settings
+      </a>
+      <a class="nav-item" onclick="doSignOut()" style="margin-top:2px;">
+        <span class="nav-icon">←</span> Sign Out
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-footer-text">Powered by Abu Zayd Solutions</div>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+        <div class="topbar-title" id="topbar-title">Dashboard Overview</div>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-user">
+          <div class="topbar-avatar">NI</div>
+          <span style="font-size:13px;color:var(--text-mid);">Noor ul-Islam</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="content-area">
+
+      <!-- OVERVIEW TAB -->
+      <div id="tab-overview" class="dash-tab" style="display:block;">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Total Certificates</div>
+            <div class="stat-value">87</div>
+            <div class="stat-delta">↑ 12 this month</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Qur'ān Certs</div>
+            <div class="stat-value">64</div>
+            <div class="stat-delta">↑ 8 this month</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">School Certs</div>
+            <div class="stat-value">23</div>
+            <div class="stat-delta">↑ 4 this month</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Total Students</div>
+            <div class="stat-value">54</div>
+            <div class="stat-delta">↑ 6 new</div>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="section-card-header">
+            <div class="section-card-title">Recent Certificates</div>
+            <button class="btn-sm" onclick="showDashTab('generate')">+ New Certificate</button>
+          </div>
+          <div class="section-card-body">
+            <ul class="activity-list">
+              <li class="activity-item">
+                <div class="activity-avatar">FA</div>
+                <div class="activity-info">
+                  <div class="activity-name">Fatimah Ahmad</div>
+                  <div class="activity-detail">Completion of Surah Al-Fātiḥah · 14 Jan 2025</div>
+                </div>
+                <span class="activity-badge">Qur'ān</span>
+              </li>
+              <li class="activity-item">
+                <div class="activity-avatar">MU</div>
+                <div class="activity-info">
+                  <div class="activity-name">Muhammad Usman</div>
+                  <div class="activity-detail">Best Student in Mathematics · Term 2</div>
+                </div>
+                <span class="activity-badge" style="background:#eef2ff;color:#3b5bdb;">School</span>
+              </li>
+              <li class="activity-item">
+                <div class="activity-avatar">AK</div>
+                <div class="activity-info">
+                  <div class="activity-name">Aisha Kareem</div>
+                  <div class="activity-detail">Memorisation of Juz Amma · 10 Jan 2025</div>
+                </div>
+                <span class="activity-badge">Qur'ān</span>
+              </li>
+              <li class="activity-item">
+                <div class="activity-avatar">YB</div>
+                <div class="activity-info">
+                  <div class="activity-name">Yusuf Bello</div>
+                  <div class="activity-detail">Excellence in Islamic Studies · End of Year</div>
+                </div>
+                <span class="activity-badge" style="background:#eef2ff;color:#3b5bdb;">School</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="section-card-header">
+            <div class="section-card-title">Quick Actions</div>
+          </div>
+          <div class="section-card-body">
+            <div class="quick-actions">
+              <button class="quick-action-btn" onclick="showDashTab('generate')" style="background:var(--emerald);color:white;border-color:var(--emerald);">
+                <div style="font-size:18px;margin-bottom:5px;">✦</div>
+                <div style="font-weight:700;font-size:13.5px;">Generate Certificate</div>
+                <div style="font-size:11.5px;opacity:0.8;">Qur'ān or School</div>
+              </button>
+              <button class="quick-action-btn" onclick="showDashTab('students')">
+                <div style="font-size:18px;margin-bottom:5px;">◎</div>
+                <div style="font-weight:700;font-size:13.5px;">Student Records</div>
+                <div style="font-size:11.5px;color:var(--text-muted);">View all</div>
+              </button>
+              <button class="quick-action-btn" onclick="showDashTab('wall')" style="background:var(--gold-pale);border-color:var(--gold-light);">
+                <div style="font-size:18px;margin-bottom:5px;">◈</div>
+                <div style="font-weight:700;font-size:13.5px;">Achievement Wall</div>
+                <div style="font-size:11.5px;color:var(--text-muted);">Public showcase</div>
+              </button>
+              <button class="quick-action-btn" onclick="showDashTab('verify')">
+                <div style="font-size:18px;margin-bottom:5px;">✓</div>
+                <div style="font-weight:700;font-size:13.5px;">Verify Certificate</div>
+                <div style="font-size:11.5px;color:var(--text-muted);">Check authenticity</div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GENERATE TAB -->
+      <div id="tab-generate" class="dash-tab" style="display:none;">
+        <div class="generate-layout">
+          <div class="gen-form-card">
+            <div class="gen-form-header">
+              <h2>Generate Certificate</h2>
+              <p>Fill in the details below and download a professional certificate</p>
+            </div>
+            <div class="gen-form-body">
+              <!-- Certificate Type Toggle -->
+              <div class="form-section-title">Certificate Type</div>
+              <div class="cert-type-tabs">
+                <button class="ctype-tab active-quran" id="tab-quran" onclick="switchCertType('quran')">🕌 Qur'ān Certificate</button>
+                <button class="ctype-tab" id="tab-school" onclick="switchCertType('school')">🎓 School Certificate</button>
+              </div>
+
+              <!-- Style Picker -->
+              <div class="form-section-title" style="margin-top:0.8rem;">Certificate Style</div>
+              <div class="style-picker-grid" id="style-picker-grid">
+                <div class="style-card active" data-style="classic" onclick="switchStyle('classic')">
+                  <div class="style-card-preview" style="background:linear-gradient(135deg,#0d5c3a,#1a7a50);border:2px solid #b8860b;"></div>
+                  <div class="style-card-name">Classic</div>
+                </div>
+                <div class="style-card" data-style="modern" onclick="switchStyle('modern')">
+                  <div class="style-card-preview" style="background:linear-gradient(135deg,#1a2240,#2d3a5e);border-left:4px solid #c9a227;"></div>
+                  <div class="style-card-name">Modern</div>
+                </div>
+                <div class="style-card" data-style="elegant" onclick="switchStyle('elegant')">
+                  <div class="style-card-preview" style="background:linear-gradient(160deg,#fff8ee,#fdf0d5);border:2px solid #c9a227;"></div>
+                  <div class="style-card-name">Elegant</div>
+                </div>
+                <div class="style-card" data-style="bold" onclick="switchStyle('bold')">
+                  <div class="style-card-preview" style="background:linear-gradient(135deg,#2c3e8c,#3b5bdb);border-top:5px solid #c9a227;"></div>
+                  <div class="style-card-name">Bold</div>
+                </div>
+              </div>
+
+              <!-- Color Theme Picker -->
+              <div class="form-section-title" style="margin-top:0.9rem;">Colour Theme</div>
+              <div class="color-theme-row">
+                <div class="color-swatch active" data-theme="emerald" style="background:#0d5c3a;" title="Emerald" onclick="switchColor('emerald')"></div>
+                <div class="color-swatch" data-theme="royal" style="background:#2c3e8c;" title="Royal Blue" onclick="switchColor('royal')"></div>
+                <div class="color-swatch" data-theme="maroon" style="background:#7b1f36;" title="Maroon" onclick="switchColor('maroon')"></div>
+                <div class="color-swatch" data-theme="teal" style="background:#0a6b72;" title="Teal" onclick="switchColor('teal')"></div>
+                <div class="color-swatch" data-theme="purple" style="background:#5b2d8e;" title="Purple" onclick="switchColor('purple')"></div>
+                <div class="color-swatch" data-theme="midnight" style="background:#1a2240;" title="Midnight" onclick="switchColor('midnight')"></div>
+                <div class="color-swatch" data-theme="gold" style="background:#8B6914;" title="Gold" onclick="switchColor('gold')"></div>
+                <div class="color-swatch" data-theme="rose" style="background:#8B2252;" title="Rose" onclick="switchColor('rose')"></div>
+                <span id="active-theme-label" style="font-size:12px;color:var(--text-muted);margin-left:4px;">Emerald</span>
+              </div>
+
+              <div class="form-divider"></div>
+              <div class="form-section-title">Student Information</div>
+              <div class="form-group">
+                <label class="form-label">Student Full Name *</label>
+                <input type="text" class="form-input" id="cert-student-name" placeholder="e.g. Fatimah Ahmad" oninput="updateCertPreview()">
+              </div>
+
+              <!-- Quran fields -->
+              <div id="quran-fields">
+                <div class="form-group">
+                  <label class="form-label">Achievement Type *</label>
+                  <select class="form-select" id="cert-achievement-type" onchange="updateAchievementTitle()">
+                    <option value="">— Select Achievement —</option>
+                    <option>Completion of Surah Al-Fātiḥah</option>
+                    <option>Completion of Arabic Alphabet</option>
+                    <option>Memorisation of Juz Amma</option>
+                    <option>Completion of Tajweed Level 1</option>
+                    <option>Completion of Tajweed Level 2</option>
+                    <option>Completion of Wuḍū' Training</option>
+                    <option>Basic Salah Training</option>
+                    <option>Hifz Completion — Full Qur'ān</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Achievement Title *</label>
+                  <input type="text" class="form-input" id="cert-achievement-title" placeholder="e.g. Completion of Surah Al-Fātiḥah" oninput="updateCertPreview()">
+                </div>
+              </div>
+
+              <!-- School fields -->
+              <div id="school-fields" style="display:none;">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label">Award Category *</label>
+                    <select class="form-select" id="school-award-type" onchange="updateSchoolAward()">
+                      <option value="">— Select Award —</option>
+                      <option>Best Student — Overall</option>
+                      <option>Excellence in Mathematics</option>
+                      <option>Excellence in English Language</option>
+                      <option>Excellence in Islamic Studies</option>
+                      <option>Excellence in Science</option>
+                      <option>Excellence in Arabic</option>
+                      <option>Best in Class</option>
+                      <option>Perfect Attendance Award</option>
+                      <option>Graduation Certificate</option>
+                      <option>Academic Merit Award</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Grade / Score (optional)</label>
+                    <input type="text" class="form-input" id="school-grade" placeholder="e.g. A+ or 95%" oninput="updateCertPreview()">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Award Title *</label>
+                  <input type="text" class="form-input" id="school-award-title" placeholder="e.g. Excellence in Mathematics" oninput="updateCertPreview()">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Academic Term / Year *</label>
+                  <input type="text" class="form-input" id="school-term" placeholder="e.g. First Term 2024/2025" oninput="updateCertPreview()">
+                </div>
+              </div>
+
+              <div class="form-divider"></div>
+              <div class="form-section-title">Institute &amp; Signatory</div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Institute Name</label>
+                  <input type="text" class="form-input" id="cert-inst-name" value="Noor ul-Islam Academy" oninput="updateCertPreview()">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Phone / Contact</label>
+                  <input type="text" class="form-input" id="cert-inst-phone" value="+234 803 123 4567" oninput="updateCertPreview()">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" id="signer-label">Teacher / Ustadh *</label>
+                  <input type="text" class="form-input" id="cert-teacher" placeholder="Ustadh Abdullah" oninput="updateCertPreview()">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Date of Issue *</label>
+                  <input type="date" class="form-input" id="cert-date" oninput="updateCertPreview()">
+                </div>
+              </div>
+
+              <div class="form-group" id="school-principal-group" style="display:none;">
+                <label class="form-label">Principal / Head Teacher</label>
+                <input type="text" class="form-input" id="school-principal" placeholder="Principal's Name" oninput="updateCertPreview()">
+              </div>
+
+              <button class="btn-generate" id="btn-generate" onclick="generateCertificate()">✦ Generate Qur'ān Certificate</button>
+            </div>
+          </div>
+
+          <!-- Preview Panel -->
+          <div class="gen-preview-card">
+            <div class="gen-preview-label">Live Preview</div>
+            <div id="cert-preview-live" style="overflow:visible;"></div>
+            <div id="cert-actions-area" style="display:none;margin-top:0.9rem;">
+              <div class="success-box">
+                <strong>✓ Certificate ready!</strong><br>
+                <span style="color:var(--text-muted);font-size:12px;">ID: <span id="cert-id-display">—</span></span>
+              </div>
+              <div class="cert-actions">
+                <button class="cert-action-btn download" id="btn-download-png" onclick="downloadCert()">⬇ Download JPEG</button>
+              </div>
+              <div class="cert-actions" style="margin-top:6px;">
+                <button class="cert-action-btn whatsapp" onclick="shareWhatsApp()">📲 WhatsApp</button>
+                <button class="cert-action-btn" onclick="copyLink()">🔗 Copy Link</button>
+              </div>
+              <div style="margin-top:1rem;border-top:1px solid var(--border-light);padding-top:0.9rem;">
+                <div style="font-size:11.5px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.5rem;">Student Message</div>
+                <div id="cert-message-box" style="background:var(--emerald-pale);border-radius:8px;padding:0.7rem;font-size:12.5px;color:var(--text-mid);font-family:'Amiri',serif;line-height:1.7;">
+                  Alhamdulillāh. Congratulations on completing your learning milestone. Continue striving for knowledge and excellence.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STUDENTS TAB -->
+      <div id="tab-students" class="dash-tab" style="display:none;">
+        <div class="search-bar">
+          <input type="text" class="search-input" placeholder="Search by name, achievement, or cert ID...">
+          <button class="btn-sm primary">Search</button>
+          <button class="btn-sm" onclick="showDashTab('generate')">+ New Certificate</button>
+        </div>
+        <div class="section-card">
+          <div class="section-card-header">
+            <div class="section-card-title">All Student Records (87)</div>
+            <button class="btn-sm">Export CSV</button>
+          </div>
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Student Name</th>
+                  <th>Type</th>
+                  <th>Achievement</th>
+                  <th>Date Issued</th>
+                  <th>Certificate ID</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Fatimah Ahmad</strong></td>
+                  <td><span class="badge green">Qur'ān</span></td>
+                  <td>Completion of Surah Al-Fātiḥah</td>
+                  <td>14 Jan 2025</td>
+                  <td><code style="font-size:11.5px;background:var(--bg);padding:2px 6px;border-radius:4px;">QUR-2025-08741</code></td>
+                  <td><button class="btn-sm">Re-download</button></td>
+                </tr>
+                <tr>
+                  <td><strong>Muhammad Usman</strong></td>
+                  <td><span class="badge blue">School</span></td>
+                  <td>Excellence in Mathematics</td>
+                  <td>10 Jan 2025</td>
+                  <td><code style="font-size:11.5px;background:var(--bg);padding:2px 6px;border-radius:4px;">SCH-2025-03291</code></td>
+                  <td><button class="btn-sm">Re-download</button></td>
+                </tr>
+                <tr>
+                  <td><strong>Aisha Kareem</strong></td>
+                  <td><span class="badge green">Qur'ān</span></td>
+                  <td>Memorisation of Juz Amma</td>
+                  <td>10 Jan 2025</td>
+                  <td><code style="font-size:11.5px;background:var(--bg);padding:2px 6px;border-radius:4px;">QUR-2025-07204</code></td>
+                  <td><button class="btn-sm">Re-download</button></td>
+                </tr>
+                <tr>
+                  <td><strong>Yusuf Bello</strong></td>
+                  <td><span class="badge blue">School</span></td>
+                  <td>Best Student — Overall</td>
+                  <td>05 Jan 2025</td>
+                  <td><code style="font-size:11.5px;background:var(--bg);padding:2px 6px;border-radius:4px;">SCH-2025-01183</code></td>
+                  <td><button class="btn-sm">Re-download</button></td>
+                </tr>
+                <tr>
+                  <td><strong>Maryam Ibrahim</strong></td>
+                  <td><span class="badge green">Qur'ān</span></td>
+                  <td>Completion of Tajweed Level 1</td>
+                  <td>02 Jan 2025</td>
+                  <td><code style="font-size:11.5px;background:var(--bg);padding:2px 6px;border-radius:4px;">QUR-2025-04851</code></td>
+                  <td><button class="btn-sm">Re-download</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- BADGES TAB -->
+      <div id="tab-badges" class="dash-tab" style="display:none;">
+        <div class="section-card">
+          <div class="section-card-header"><div class="section-card-title">Digital Badges</div></div>
+          <div class="section-card-body">
+            <div class="badges-grid">
+              <div class="badge-card"><span class="badge-icon">🌟</span><div class="badge-name">First Surah</div><div class="badge-count">32 earned</div></div>
+              <div class="badge-card"><span class="badge-icon">📖</span><div class="badge-name">Juz Amma</div><div class="badge-count">18 earned</div></div>
+              <div class="badge-card"><span class="badge-icon">🕌</span><div class="badge-name">Tajweed Level 1</div><div class="badge-count">14 earned</div></div>
+              <div class="badge-card"><span class="badge-icon">✨</span><div class="badge-name">Tajweed Level 2</div><div class="badge-count">9 earned</div></div>
+              <div class="badge-card"><span class="badge-icon">🏆</span><div class="badge-name">Hafidh</div><div class="badge-count">3 earned</div></div>
+              <div class="badge-card"><span class="badge-icon">🎓</span><div class="badge-name">Academic Star</div><div class="badge-count">11 earned</div></div>
+              <div class="badge-card"><span class="badge-icon">📐</span><div class="badge-name">Math Excellence</div><div class="badge-count">6 earned</div></div>
+              <div class="badge-card"><span class="badge-icon">🥇</span><div class="badge-name">Best Student</div><div class="badge-count">4 earned</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WALL TAB -->
+      <div id="tab-wall" class="dash-tab" style="display:none;">
+        <div class="section-card">
+          <div class="section-card-header"><div class="section-card-title">Achievement Wall — Public Showcase</div></div>
+          <div class="section-card-body">
+            <div class="wall-grid">
+              <div class="wall-card"><div class="wall-card-name">Fatimah Ahmad</div><div class="wall-card-achievement">Completion of Surah Al-Fātiḥah</div><div class="wall-card-inst">Noor ul-Islam Academy</div><div class="wall-card-date">14 January 2025</div></div>
+              <div class="wall-card" style="--accent:#3b5bdb;"><div class="wall-card-name">Muhammad Usman</div><div class="wall-card-achievement" style="color:#3b5bdb;">Excellence in Mathematics</div><div class="wall-card-inst">Noor ul-Islam Academy</div><div class="wall-card-date">10 January 2025</div></div>
+              <div class="wall-card"><div class="wall-card-name">Aisha Kareem</div><div class="wall-card-achievement">Memorisation of Juz Amma</div><div class="wall-card-inst">Noor ul-Islam Academy</div><div class="wall-card-date">10 January 2025</div></div>
+              <div class="wall-card" style="--accent:#3b5bdb;"><div class="wall-card-name">Yusuf Bello</div><div class="wall-card-achievement" style="color:#3b5bdb;">Best Student — Overall</div><div class="wall-card-inst">Noor ul-Islam Academy</div><div class="wall-card-date">05 January 2025</div></div>
+              <div class="wall-card"><div class="wall-card-name">Maryam Ibrahim</div><div class="wall-card-achievement">Completion of Tajweed Level 1</div><div class="wall-card-inst">Noor ul-Islam Academy</div><div class="wall-card-date">02 January 2025</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VERIFY TAB -->
+      <div id="tab-verify" class="dash-tab" style="display:none;">
+        <div class="verify-card">
+          <div class="section-card">
+            <div class="section-card-header"><div class="section-card-title">Verify a Certificate</div></div>
+            <div class="section-card-body">
+              <p style="font-size:13.5px;color:var(--text-mid);margin-bottom:1.1rem;">Enter the Certificate ID printed on the certificate to verify its authenticity.</p>
+              <div class="form-group">
+                <label class="form-label">Certificate ID</label>
+                <input type="text" class="form-input" id="verify-input" placeholder="e.g. QUR-2025-08741 or SCH-2025-03291">
+              </div>
+              <button class="btn-full primary" onclick="verifyCertificate()">Verify Certificate</button>
+            </div>
+          </div>
+          <div id="verify-result" style="display:none;">
+            <div class="verify-success">
+              <span class="verify-icon">✅</span>
+              <div style="font-weight:700;font-size:1.05rem;color:var(--emerald-dark);margin-bottom:0.75rem;">Certificate Verified</div>
+              <div class="verify-row"><span class="verify-label">Student</span><span class="verify-value">Fatimah Ahmad</span></div>
+              <div class="verify-row"><span class="verify-label">Achievement</span><span class="verify-value">Completion of Surah Al-Fātiḥah</span></div>
+              <div class="verify-row"><span class="verify-label">Institute</span><span class="verify-value">Noor ul-Islam Academy</span></div>
+              <div class="verify-row"><span class="verify-label">Date Issued</span><span class="verify-value">14 January 2025</span></div>
+              <div class="verify-row"><span class="verify-label">Status</span><span class="verify-value" style="color:var(--emerald);">✓ Authentic</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SETTINGS TAB -->
+      <div id="tab-settings" class="dash-tab" style="display:none;">
+        <div class="section-card">
+          <div class="section-card-header"><div class="section-card-title">Institute Settings</div></div>
+          <div class="section-card-body">
+            <div class="settings-section">
+              <div class="settings-title">Institute Information</div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Institute Name</label>
+                  <input type="text" class="form-input" value="Noor ul-Islam Academy">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Director Name</label>
+                  <input type="text" class="form-input" value="Sheikh Ahmad Ali">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Email</label>
+                  <input type="email" class="form-input" value="info@noorulislam.com">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Phone Number</label>
+                  <input type="tel" class="form-input" value="+234 803 123 4567">
+                </div>
+              </div>
+            </div>
+            <div class="settings-section">
+              <div class="settings-title">Account Security</div>
+              <div class="form-group">
+                <label class="form-label">Current Password</label>
+                <input type="password" class="form-input" placeholder="Enter current password">
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">New Password</label>
+                  <input type="password" class="form-input" placeholder="New password">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Confirm Password</label>
+                  <input type="password" class="form-input" placeholder="Repeat password">
+                </div>
+              </div>
+              <button class="btn-sm primary" style="margin-top:0.5rem;">Save Changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content-area -->
+  </div><!-- /main-content -->
+</div><!-- /page-dashboard -->
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Hidden canvas container for download -->
+<div id="cert-download-target" style="position:absolute;left:-9999px;top:-9999px;width:900px;"></div>
+
+<script>
+// ===== STATE =====
+let currentCertType = 'quran';
+let currentCertStyle = 'classic';
+let currentColorTheme = 'emerald';
+let generatedCertId = null;
+
+// ===== AUTH =====
+function getUsers() {
+  try {
+    const data = JSON.parse(localStorage.getItem('azs_users') || '[]');
+    return Array.isArray(data) ? data : [];
+  } catch { return []; }
+}
+function saveUsers(users) { localStorage.setItem('azs_users', JSON.stringify(users)); }
+function setLoggedIn(user) { localStorage.setItem('azs_session', JSON.stringify(user)); }
+function getLoggedIn() { try { return JSON.parse(localStorage.getItem('azs_session')); } catch { return null; } }
+
+(function seedDemo() {
+  try { const raw = JSON.parse(localStorage.getItem('azs_users')||'[]'); if(!Array.isArray(raw)) localStorage.removeItem('azs_users'); } catch { localStorage.removeItem('azs_users'); }
+  const users = getUsers();
+  if (!users.find(u => u.email === 'info@noorulislam.com')) {
+    users.push({ email:'info@noorulislam.com', password:'password123', inst:'Noor ul-Islam Academy', director:'Sheikh Ahmad Ali', phone:'+234 803 123 4567' });
+    saveUsers(users);
+  }
+})();
+
+function doLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
+  const btn = document.getElementById('login-btn');
+  document.getElementById('login-error').style.display = 'none';
+  if (!email || !password) { showAuthError('login-error','Please enter your email and password.'); return; }
+  const user = getUsers().find(u => u.email.toLowerCase()===email.toLowerCase() && u.password===password);
+  if (!user) { showAuthError('login-error','Incorrect email or password. Try the demo credentials below.'); return; }
+  btn.textContent='Signing in…'; btn.disabled=true;
+  setTimeout(() => { setLoggedIn(user); btn.textContent='Sign In'; btn.disabled=false; applySession(user); enterDashboard(); showToast('Welcome back, '+user.inst+'!'); }, 600);
+}
+
+function doRegister() {
+  const inst=document.getElementById('reg-inst').value.trim();
+  const director=document.getElementById('reg-director').value.trim();
+  const email=document.getElementById('reg-email').value.trim();
+  const phone=document.getElementById('reg-phone').value.trim();
+  const password=document.getElementById('reg-password').value;
+  const confirm=document.getElementById('reg-confirm').value;
+  const btn=document.getElementById('reg-btn');
+  document.getElementById('reg-error').style.display='none';
+  if (!inst||!director||!email||!phone||!password) { showAuthError('reg-error','Please fill in all required fields.'); return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showAuthError('reg-error','Please enter a valid email address.'); return; }
+  if (password.length<6) { showAuthError('reg-error','Password must be at least 6 characters.'); return; }
+  if (password!==confirm) { showAuthError('reg-error','Passwords do not match.'); return; }
+  const users=getUsers();
+  if (users.find(u=>u.email.toLowerCase()===email.toLowerCase())) { showAuthError('reg-error','An account with this email already exists.'); return; }
+  btn.textContent='Creating account…'; btn.disabled=true;
+  setTimeout(() => {
+    const newUser={email,password,inst,director,phone};
+    users.push(newUser); saveUsers(users); setLoggedIn(newUser);
+    btn.textContent='Create Account'; btn.disabled=false;
+    applySession(newUser); enterDashboard(); showToast('Account created! Welcome, '+inst+'.');
+  }, 700);
+}
+
+function showAuthError(id,msg) { const el=document.getElementById(id); el.textContent=msg; el.style.display='block'; }
+
+function applySession(user) {
+  const instNameEl=document.querySelector('.sidebar-inst-name');
+  const topbarAvatarEl=document.querySelector('.topbar-avatar');
+  const topbarUserSpan=document.querySelector('.topbar-user span');
+  const sidebarSubEl=document.querySelector('.sidebar-inst-sub');
+  if(instNameEl) instNameEl.textContent=user.inst;
+  if(sidebarSubEl) sidebarSubEl.textContent=user.phone||'';
+  if(topbarAvatarEl) topbarAvatarEl.textContent=user.inst.slice(0,2).toUpperCase();
+  if(topbarUserSpan) topbarUserSpan.textContent=user.inst;
+  const instInput=document.getElementById('cert-inst-name');
+  const phoneInput=document.getElementById('cert-inst-phone');
+  if(instInput) instInput.value=user.inst;
+  if(phoneInput) phoneInput.value=user.phone||'';
+}
+
+function doSignOut() { localStorage.removeItem('azs_session'); showPage('home'); showToast('Signed out successfully.'); }
+
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p=>{p.classList.remove('active');p.style.display='';});
+  const t=document.getElementById('page-'+name);
+  if(t){t.classList.add('active');window.scrollTo(0,0);}
+}
+
+function enterDashboard() {
+  document.querySelectorAll('.page').forEach(p=>{p.classList.remove('active');p.style.display='';});
+  const dash=document.getElementById('page-dashboard');
+  dash.classList.add('active'); dash.style.display='flex';
+  showDashTab('generate'); window.scrollTo(0,0);
+  const dateInput=document.getElementById('cert-date');
+  if(dateInput&&!dateInput.value) dateInput.value=new Date().toISOString().split('T')[0];
+  setTimeout(() => { updateCertPreview(); setTimeout(scaleCertPreview, 150); }, 100);
+}
+
+function showDashTab(name) {
+  document.querySelectorAll('.dash-tab').forEach(t=>t.style.display='none');
+  const tab=document.getElementById('tab-'+name); if(tab) tab.style.display='block';
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const nav=document.getElementById('nav-'+name); if(nav) nav.classList.add('active');
+  const titles={overview:'Dashboard Overview',generate:'Generate Certificate',students:'Student Records',badges:'Digital Badges',wall:'Achievement Wall',verify:'Verify Certificate',settings:'Settings'};
+  document.getElementById('topbar-title').textContent=titles[name]||name;
+  if(window.innerWidth<=768){document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebar-overlay').classList.remove('active');}
+}
+
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sidebar-overlay').classList.toggle('active'); }
+
+// ===== THEMES =====
+const CERT_THEMES = {
+  emerald:  {primary:'#0d5c3a',dark:'#083d27',mid:'#1a7a50',light:'#e8f5ee',pale:'#f0faf5',accent:'#b8860b',accentLight:'#f5e6a3',name:'Emerald'},
+  royal:    {primary:'#2c3e8c',dark:'#1a2560',mid:'#3d52b8',light:'#e8ecf8',pale:'#f0f2fb',accent:'#c9a227',accentLight:'#f9efc0',name:'Royal Blue'},
+  maroon:   {primary:'#7b1f36',dark:'#571325',mid:'#a03050',light:'#f5e8eb',pale:'#fbf0f3',accent:'#b8860b',accentLight:'#f5e6a3',name:'Maroon'},
+  teal:     {primary:'#0a6b72',dark:'#064a50',mid:'#128a93',light:'#e0f5f6',pale:'#f0fafb',accent:'#c07c12',accentLight:'#faebd0',name:'Teal'},
+  purple:   {primary:'#5b2d8e',dark:'#3d1d62',mid:'#7c44b8',light:'#ede8f8',pale:'#f5f2fc',accent:'#c09020',accentLight:'#f8efc8',name:'Purple'},
+  midnight: {primary:'#1a2240',dark:'#0f1528',mid:'#2d3a5e',light:'#e4e8f0',pale:'#f0f2f8',accent:'#c9a227',accentLight:'#f9efc0',name:'Midnight'},
+  gold:     {primary:'#7a5200',dark:'#4a3000',mid:'#9e6c0a',light:'#fdf3dc',pale:'#fffbf0',accent:'#c41e3a',accentLight:'#ffd6dc',name:'Gold'},
+  rose:     {primary:'#8B2252',dark:'#5c1238',mid:'#b5336e',light:'#fce8f1',pale:'#fff0f7',accent:'#b8860b',accentLight:'#f5e6a3',name:'Rose'},
+};
+function getTheme() { return CERT_THEMES[currentColorTheme]||CERT_THEMES.emerald; }
+
+function switchColor(theme) {
+  currentColorTheme=theme;
+  document.querySelectorAll('.color-swatch').forEach(s=>s.classList.toggle('active',s.dataset.theme===theme));
+  const label=document.getElementById('active-theme-label');
+  if(label) label.textContent=CERT_THEMES[theme]?.name||theme;
+  updateCertPreview();
+}
+
+function switchStyle(style) {
+  currentCertStyle=style;
+  document.querySelectorAll('.style-card').forEach(s=>s.classList.toggle('active',s.dataset.style===style));
+  updateCertPreview();
+}
+
+// ===== CERT TYPE =====
+function switchCertType(type) {
+  currentCertType=type;
+  document.getElementById('tab-quran').className='ctype-tab'+(type==='quran'?' active-quran':'');
+  document.getElementById('tab-school').className='ctype-tab'+(type==='school'?' active-school':'');
+  document.getElementById('quran-fields').style.display=type==='quran'?'block':'none';
+  document.getElementById('school-fields').style.display=type==='school'?'block':'none';
+  document.getElementById('school-principal-group').style.display=type==='school'?'block':'none';
+  document.getElementById('signer-label').textContent=type==='quran'?'Teacher / Ustadh *':'Class Teacher *';
+  const btn=document.getElementById('btn-generate');
+  btn.textContent=type==='quran'?'✦ Generate Qur\'ān Certificate':'🎓 Generate School Certificate';
+  btn.className='btn-generate'+(type==='school'?' school-mode':'');
+  document.getElementById('cert-actions-area').style.display='none';
+  updateCertPreview();
+}
+
+// ===== FORM DATA =====
+function getFormData() {
+  return {
+    student:   document.getElementById('cert-student-name')?.value.trim()||'',
+    achievement: document.getElementById('cert-achievement-title')?.value.trim()||'',
+    award:     document.getElementById('school-award-title')?.value.trim()||'',
+    teacher:   document.getElementById('cert-teacher')?.value.trim()||'',
+    principal: document.getElementById('school-principal')?.value.trim()||'',
+    date:      document.getElementById('cert-date')?.value||'',
+    instName:  document.getElementById('cert-inst-name')?.value.trim()||'Noor ul-Islam Academy',
+    instPhone: document.getElementById('cert-inst-phone')?.value.trim()||'',
+    grade:     document.getElementById('school-grade')?.value.trim()||'',
+    term:      document.getElementById('school-term')?.value.trim()||'',
+  };
+}
+
+function updateAchievementTitle() { const v=document.getElementById('cert-achievement-type')?.value; const i=document.getElementById('cert-achievement-title'); if(v&&i){i.value=v;updateCertPreview();} }
+function updateSchoolAward() { const v=document.getElementById('school-award-type')?.value; const i=document.getElementById('school-award-title'); if(v&&i){i.value=v;updateCertPreview();} }
+
+// ===== CERT HELPERS =====
+function fmtDate(d) {
+  if(!d) return new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+  return new Date(d+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+}
+const QP=[1,0,1,1,0,0,1,0,1,1,0,1,0,1,1,0,1,1,0,1,1,0,0,1,1];
+function qrDots(t) { return QP.map(c=>`<div style="background:${c?t.dark:'transparent'};border-radius:1px;"></div>`).join(''); }
+
+// ===== STYLE RENDERERS =====
+
+// CLASSIC — elegant bordered Islamic style
+function renderClassic(data, certType, t) {
+  const isQ = certType==='quran';
+  const title = isQ?'Certificate of Achievement':'Certificate of Excellence';
+  const subtitle = isQ?'شهادة إنجاز':'Academic Achievement Award';
+  const bodyText = isQ
+    ? `For successfully completing<br><strong style="font-size:1.15em;color:${t.primary};">${data.achievement||'Achievement Title'}</strong>`
+    : `In recognition of outstanding achievement in<br><strong style="font-size:1.15em;color:${t.primary};">${data.award||'Award Title'}</strong>${data.grade?`<br><span style="font-size:0.85em;color:${t.accent};font-weight:700;">Grade: ${data.grade}</span>`:''}`;
+  const footer = isQ?`بَارَكَ اللهُ فِيكُم`:`${data.term||''}`;
+
+  return `<div style="width:100%;aspect-ratio:1.414;background:#fffef8;border:3px solid ${t.accent};border-radius:4px;position:relative;overflow:hidden;font-family:'Cormorant Garamond',serif;box-sizing:border-box;">
+    <div style="position:absolute;inset:8px;border:1px solid ${t.accent}60;border-radius:2px;pointer-events:none;"></div>
+    <div style="position:absolute;top:14px;left:14px;width:28px;height:28px;border-top:2.5px solid ${t.accent};border-left:2.5px solid ${t.accent};"></div>
+    <div style="position:absolute;top:14px;right:14px;width:28px;height:28px;border-top:2.5px solid ${t.accent};border-right:2.5px solid ${t.accent};"></div>
+    <div style="position:absolute;bottom:14px;left:14px;width:28px;height:28px;border-bottom:2.5px solid ${t.accent};border-left:2.5px solid ${t.accent};"></div>
+    <div style="position:absolute;bottom:14px;right:14px;width:28px;height:28px;border-bottom:2.5px solid ${t.accent};border-right:2.5px solid ${t.accent};"></div>
+    <div style="position:absolute;inset:22px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:8px 24px;text-align:center;">
+      <div style="width:100%;">
+        <div style="width:46px;height:46px;margin:0 auto 4px;background:${t.light};border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;">${isQ?'🕌':'🎓'}</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:0.82em;font-weight:700;color:${t.dark};">${data.instName}</div>
+        <div style="font-family:'DM Sans',sans-serif;font-size:0.52em;color:#999;">${data.instPhone}</div>
+      </div>
+      <div style="width:90%;height:1px;background:linear-gradient(to right,transparent,${t.accent},transparent);"></div>
+      <div>
+        <div style="font-size:0.9em;font-weight:700;color:${t.accent};letter-spacing:2px;text-transform:uppercase;">${title}</div>
+        <div style="font-family:'Amiri',serif;font-size:1em;color:${t.primary};margin-top:2px;">${subtitle}</div>
+        <div style="font-family:'DM Sans',sans-serif;font-size:0.54em;color:#999;margin-top:4px;">This certificate is proudly presented to</div>
+      </div>
+      <div style="font-size:1.3em;font-weight:700;font-style:italic;color:${t.dark};border-bottom:1.5px solid ${t.accent};padding-bottom:2px;">${data.student||'Student Name'}</div>
+      <div style="font-family:'DM Sans',sans-serif;font-size:0.56em;line-height:1.7;">${bodyText}</div>
+      <div style="font-family:'Amiri',serif;font-size:0.82em;color:${t.accent};">${footer}</div>
+      <div style="width:90%;height:1px;background:linear-gradient(to right,transparent,${t.accent},transparent);"></div>
+      <div style="width:100%;display:flex;justify-content:space-between;align-items:flex-end;">
+        <div style="text-align:center;">
+          <div style="width:80px;height:1px;background:${t.dark};margin:0 auto 2px;"></div>
+          <div style="font-family:'DM Sans',sans-serif;font-size:0.5em;font-weight:700;color:${t.dark};">${data.teacher||'Teacher'}</div>
+          <div style="font-family:'DM Sans',sans-serif;font-size:0.44em;color:#999;">${isQ?'Teacher / Ustadh':'Class Teacher'}</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-family:'DM Sans',sans-serif;font-size:0.44em;color:#999;">Date Issued</div>
+          <div style="font-family:'DM Sans',sans-serif;font-size:0.5em;font-weight:600;color:${t.dark};">${fmtDate(data.date)}</div>
+          ${data.certId?`<div style="font-family:'DM Sans',sans-serif;font-size:0.4em;color:#bbb;margin-top:1px;">${data.certId}</div>`:''}
+        </div>
+        ${data.principal
+          ? `<div style="text-align:center;"><div style="width:80px;height:1px;background:${t.dark};margin:0 auto 2px;"></div><div style="font-family:'DM Sans',sans-serif;font-size:0.5em;font-weight:700;color:${t.dark};">${data.principal}</div><div style="font-family:'DM Sans',sans-serif;font-size:0.44em;color:#999;">Principal</div></div>`
+          : `<div style="width:36px;height:36px;border:1px solid ${t.accent}80;border-radius:2px;display:grid;grid-template-columns:repeat(5,1fr);gap:1.5px;padding:3px;margin:0 auto 2px;">${qrDots(t)}</div>`
+        }
+      </div>
+      <div style="font-family:'DM Sans',sans-serif;font-size:0.42em;color:#888;font-weight:600;letter-spacing:0.3px;">✦ Powered by Abu Zayd Solutions · www.abuzaydsolutions.com</div>
+    </div>
+  </div>`;
+}
+
+// MODERN — dark sidebar accent, clean
+function renderModern(data, certType, t) {
+  const isQ = certType==='quran';
+  return `<div style="width:100%;aspect-ratio:1.414;background:#fff;border:2px solid ${t.dark};border-radius:4px;position:relative;overflow:hidden;font-family:'DM Sans',sans-serif;box-sizing:border-box;display:flex;">
+    <div style="width:12px;background:linear-gradient(to bottom,${t.mid},${t.dark});flex-shrink:0;"></div>
+    <div style="flex:1;display:flex;flex-direction:column;padding:16px 20px 10px;position:relative;">
+      <div style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(to right,${t.accent},${t.accentLight},${t.accent});"></div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;margin-top:6px;">
+        <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,${t.dark},${t.mid});display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;">${isQ?'🕌':'🎓'}</div>
+        <div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:0.88em;font-weight:700;color:${t.dark};">${data.instName}</div>
+          <div style="font-size:0.5em;color:#aaa;">${data.instPhone}</div>
+        </div>
+        <div style="margin-left:auto;text-align:right;">
+          <div style="font-size:0.46em;color:#bbb;">Certificate ID</div>
+          <div style="font-size:0.48em;font-weight:700;color:${t.mid};">${data.certId||'—'}</div>
+        </div>
+      </div>
+      <div style="height:1px;background:${t.light};margin-bottom:10px;"></div>
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:6px;">
+        <div style="font-size:0.46em;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:${t.mid};">CERTIFICATE OF ${isQ?'ACHIEVEMENT':'EXCELLENCE'}</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.4em;font-weight:700;font-style:italic;color:${t.dark};line-height:1.1;">${data.student||'Student Name'}</div>
+        <div style="font-size:0.52em;color:#777;">${isQ?'has successfully completed':'is recognised for outstanding achievement in'}</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:0.95em;font-weight:700;color:${t.primary};">${isQ?(data.achievement||'Achievement Title'):(data.award||'Award Title')}</div>
+        ${isQ?`<div style="font-family:'Amiri',serif;font-size:0.72em;color:${t.accent};margin-top:2px;">بَارَكَ اللهُ فِيكُم</div>`:(data.grade?`<div style="display:inline-block;background:linear-gradient(135deg,${t.dark},${t.mid});color:white;padding:2px 10px;border-radius:20px;font-size:0.5em;font-weight:700;margin-top:2px;">Grade: ${data.grade}</div>`:'')}
+        ${data.term?`<div style="font-size:0.48em;color:#aaa;">${data.term}</div>`:''}
+      </div>
+      <div style="height:1px;background:${t.light};margin:8px 0;"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div style="width:70px;height:1px;background:${t.dark};margin-bottom:2px;"></div>
+          <div style="font-size:0.5em;font-weight:700;color:${t.dark};">${data.teacher||'Teacher'}</div>
+          <div style="font-size:0.44em;color:#aaa;">${isQ?'Teacher / Ustadh':'Class Teacher'}</div>
+        </div>
+        ${data.principal?`<div><div style="width:70px;height:1px;background:${t.dark};margin-bottom:2px;"></div><div style="font-size:0.5em;font-weight:700;color:${t.dark};">${data.principal}</div><div style="font-size:0.44em;color:#aaa;">Principal</div></div>`:'<div style="width:40px;height:40px;border:2px solid ${t.dark};border-radius:50%;display:flex;align-items:center;justify-content:center;"><span style="font-size:0.4em;font-weight:700;color:${t.dark};text-align:center;line-height:1.1;">SEAL</span></div>'}
+        <div style="text-align:right;">
+          <div style="font-size:0.44em;color:#bbb;">Date Issued</div>
+          <div style="font-size:0.5em;font-weight:600;color:${t.dark};">${fmtDate(data.date)}</div>
+        </div>
+      </div>
+      <div style="font-size:0.4em;color:#999;font-weight:600;text-align:center;margin-top:4px;letter-spacing:0.3px;">✦ Powered by Abu Zayd Solutions · www.abuzaydsolutions.com</div>
+    </div>
+  </div>`;
+}
+
+// ELEGANT — cream/parchment, ornate gold lines
+function renderElegant(data, certType, t) {
+  const isQ = certType==='quran';
+  return `<div style="width:100%;aspect-ratio:1.414;background:linear-gradient(160deg,#fffdf5,#fdf5e6,#fffdf5);border:3px double ${t.accent};border-radius:4px;position:relative;overflow:hidden;font-family:'Cormorant Garamond',serif;box-sizing:border-box;">
+    <div style="position:absolute;inset:6px;border:1px solid ${t.accent}40;border-radius:2px;"></div>
+    <div style="position:absolute;top:0;left:0;right:0;height:8px;background:linear-gradient(to right,${t.dark},${t.mid},${t.dark});opacity:0.9;"></div>
+    <div style="position:absolute;bottom:0;left:0;right:0;height:5px;background:linear-gradient(to right,${t.accent},${t.accentLight},${t.accent});"></div>
+    <div style="position:absolute;inset:16px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:10px 28px;text-align:center;">
+      <div>
+        <div style="width:50px;height:50px;margin:0 auto 3px;background:linear-gradient(135deg,${t.dark},${t.mid});border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;color:white;">${isQ?'🕌':'🎓'}</div>
+        <div style="font-size:0.88em;font-weight:700;color:${t.dark};letter-spacing:0.5px;">${data.instName}</div>
+        <div style="font-family:'DM Sans',sans-serif;font-size:0.5em;color:#aaa;">${data.instPhone}</div>
+      </div>
+      <div style="width:70%;display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;height:1px;background:${t.accent};"></div>
+        <div style="font-size:0.8em;color:${t.accent};">✦</div>
+        <div style="flex:1;height:1px;background:${t.accent};"></div>
+      </div>
+      <div>
+        <div style="font-size:0.58em;font-family:'DM Sans',sans-serif;letter-spacing:3px;text-transform:uppercase;color:#aaa;margin-bottom:3px;">${isQ?'CERTIFICATE OF ACHIEVEMENT':'CERTIFICATE OF EXCELLENCE'}</div>
+        ${isQ?`<div style="font-family:'Amiri',serif;font-size:1.1em;color:${t.primary};direction:rtl;">شهادة إنجاز</div>`:`<div style="font-size:0.7em;color:${t.mid};font-style:italic;">Academic Achievement Award</div>`}
+        <div style="font-family:'DM Sans',sans-serif;font-size:0.5em;color:#bbb;margin-top:4px;">This certificate is proudly presented to</div>
+      </div>
+      <div style="font-size:1.4em;font-weight:700;font-style:italic;color:${t.dark};border-bottom:1px solid ${t.accent};padding-bottom:3px;min-width:200px;">${data.student||'Student Name'}</div>
+      <div>
+        <div style="font-family:'DM Sans',sans-serif;font-size:0.52em;color:#999;">${isQ?'For the successful completion of':'In recognition of outstanding achievement in'}</div>
+        <div style="font-size:1em;font-weight:700;color:${t.primary};margin-top:2px;">${isQ?(data.achievement||'Achievement Title'):(data.award||'Award Title')}</div>
+        ${data.grade?`<div style="font-family:'DM Sans',sans-serif;font-size:0.52em;color:${t.accent};font-weight:700;margin-top:2px;">Grade Achieved: ${data.grade}</div>`:''}
+        ${isQ?`<div style="font-family:'Amiri',serif;font-size:0.8em;color:${t.accent};margin-top:4px;">بَارَكَ اللهُ فِيكُم</div>`:data.term?`<div style="font-family:'DM Sans',sans-serif;font-size:0.48em;color:#bbb;margin-top:2px;">${data.term}</div>`:''}
+      </div>
+      <div style="width:70%;display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;height:1px;background:${t.accent};"></div>
+        <div style="font-size:0.8em;color:${t.accent};">✦</div>
+        <div style="flex:1;height:1px;background:${t.accent};"></div>
+      </div>
+      <div style="width:100%;display:flex;justify-content:space-between;align-items:flex-end;">
+        <div style="text-align:center;">
+          <div style="width:80px;height:1px;background:${t.dark};margin:0 auto 2px;"></div>
+          <div style="font-family:'DM Sans',sans-serif;font-size:0.5em;font-weight:700;color:${t.dark};">${data.teacher||'Teacher'}</div>
+          <div style="font-family:'DM Sans',sans-serif;font-size:0.44em;color:#bbb;">${isQ?'Teacher / Ustadh':'Class Teacher'}</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:1.2em;color:${t.accent};">❋</div>
+          <div style="font-family:'DM Sans',sans-serif;font-size:0.46em;color:${t.dark};font-weight:600;">${fmtDate(data.date)}</div>
+          <div style="font-family:'DM Sans',sans-serif;font-size:0.4em;color:#bbb;">${data.certId||''}</div>
+        </div>
+        ${data.principal?`<div style="text-align:center;"><div style="width:80px;height:1px;background:${t.dark};margin:0 auto 2px;"></div><div style="font-family:'DM Sans',sans-serif;font-size:0.5em;font-weight:700;color:${t.dark};">${data.principal}</div><div style="font-family:'DM Sans',sans-serif;font-size:0.44em;color:#bbb;">Principal</div></div>`
+        :`<div style="width:46px;height:46px;border-radius:50%;border:2px dashed ${t.accent};display:flex;align-items:center;justify-content:center;"><span style="font-family:'DM Sans',sans-serif;font-size:0.38em;font-weight:700;color:${t.accent};text-align:center;line-height:1.2;">OFFICIAL<br>SEAL</span></div>`}
+      </div>
+      <div style="font-family:'DM Sans',sans-serif;font-size:0.41em;color:#888;font-weight:600;letter-spacing:0.3px;">✦ Powered by Abu Zayd Solutions · www.abuzaydsolutions.com</div>
+    </div>
+  </div>`;
+}
+
+// BOLD — strong header band, modern academic
+function renderBold(data, certType, t) {
+  const isQ = certType==='quran';
+  return `<div style="width:100%;aspect-ratio:1.414;background:white;border-radius:4px;overflow:hidden;font-family:'DM Sans',sans-serif;box-sizing:border-box;display:flex;flex-direction:column;border:2px solid ${t.dark};">
+    <div style="background:linear-gradient(135deg,${t.dark},${t.mid});padding:12px 20px;display:flex;align-items:center;gap:12px;flex-shrink:0;">
+      <div style="width:42px;height:42px;border-radius:50%;border:2px solid ${t.accent};display:flex;align-items:center;justify-content:center;font-size:18px;background:rgba(255,255,255,0.12);">${isQ?'🕌':'🎓'}</div>
+      <div style="flex:1;">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1em;font-weight:700;color:white;letter-spacing:0.3px;">${data.instName}</div>
+        <div style="font-size:0.5em;color:rgba(255,255,255,0.55);">${data.instPhone}</div>
+      </div>
+      ${isQ?`<div style="font-family:'Amiri',serif;font-size:1.1em;color:${t.accentLight};direction:rtl;">شهادة إنجاز</div>`:`<div style="font-size:0.52em;color:${t.accentLight};font-weight:700;letter-spacing:1px;text-transform:uppercase;">Academic Award</div>`}
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 28px;text-align:center;gap:6px;position:relative;">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(to right,${t.accent},${t.accentLight},${t.accent});"></div>
+      <div style="font-size:0.5em;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:${t.mid};">CERTIFICATE OF ${isQ?'ACHIEVEMENT':'EXCELLENCE'}</div>
+      <div style="font-family:'DM Sans',sans-serif;font-size:0.54em;color:#aaa;">This certificate is proudly presented to</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.5em;font-weight:700;font-style:italic;color:${t.dark};margin:2px 0;">${data.student||'Student Name'}</div>
+      <div style="width:60px;height:3px;background:linear-gradient(to right,${t.accent},${t.accentLight});border-radius:2px;"></div>
+      <div style="font-size:0.52em;color:#888;">${isQ?'For successfully completing':'In recognition of outstanding achievement in'}</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1em;font-weight:700;color:${t.primary};">${isQ?(data.achievement||'Achievement Title'):(data.award||'Award Title')}</div>
+      ${data.grade?`<div style="background:linear-gradient(135deg,${t.dark},${t.mid});color:white;padding:3px 14px;border-radius:20px;font-size:0.5em;font-weight:700;">Grade: ${data.grade}</div>`:''}
+      ${data.term?`<div style="font-size:0.47em;color:#bbb;">${data.term}</div>`:''}
+      ${isQ?`<div style="font-family:'Amiri',serif;font-size:0.85em;color:${t.accent};margin-top:2px;">بَارَكَ اللهُ فِيكُم</div>`:''}
+    </div>
+    <div style="background:${t.pale};border-top:1px solid ${t.light};padding:8px 20px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;">
+      <div style="text-align:center;">
+        <div style="width:72px;height:1px;background:${t.dark};margin:0 auto 2px;"></div>
+        <div style="font-size:0.5em;font-weight:700;color:${t.dark};">${data.teacher||'Teacher'}</div>
+        <div style="font-size:0.43em;color:#aaa;">${isQ?'Teacher / Ustadh':'Class Teacher'}</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:0.58em;color:#999;margin-bottom:1px;">Date of Issue</div>
+        <div style="font-size:0.5em;font-weight:700;color:${t.dark};">${fmtDate(data.date)}</div>
+        <div style="font-size:0.4em;color:#bbb;margin-top:1px;">${data.certId||''}</div>
+      </div>
+      ${data.principal?`<div style="text-align:center;"><div style="width:72px;height:1px;background:${t.dark};margin:0 auto 2px;"></div><div style="font-size:0.5em;font-weight:700;color:${t.dark};">${data.principal}</div><div style="font-size:0.43em;color:#aaa;">Principal</div></div>`
+      :`<div style="width:44px;height:44px;border-radius:50%;border:2px solid ${t.dark};background:white;display:flex;align-items:center;justify-content:center;"><span style="font-size:0.38em;font-weight:700;color:${t.dark};text-align:center;line-height:1.1;">OFFICIAL<br>SEAL</span></div>`}
+    </div>
+    <div style="background:${t.dark};padding:3px;text-align:center;">
+      <div style="font-size:0.42em;color:rgba(255,255,255,0.7);font-weight:600;letter-spacing:0.3px;">✦ Powered by Abu Zayd Solutions · www.abuzaydsolutions.com</div>
+    </div>
+  </div>`;
+}
+
+// ===== MAIN RENDER DISPATCHER =====
+function renderCertificate(el, data, certType, certStyle) {
+  const t = getTheme();
+  let html = '';
+  if (certStyle==='modern') html = renderModern(data, certType, t);
+  else if (certStyle==='elegant') html = renderElegant(data, certType, t);
+  else if (certStyle==='bold') html = renderBold(data, certType, t);
+  else html = renderClassic(data, certType, t);
+  el.innerHTML = html;
+}
+
+// Legacy wrappers kept for sample cert on homepage
+function renderQuranCertificate(el, data) { renderCertificate(el, data, 'quran', 'classic'); }
+function renderSchoolCertificate(el, data) { renderCertificate(el, data, 'school', 'classic'); }
+
+// ===== SCALE PREVIEW =====
+function scaleCertPreview() {
+  const wrapper = document.getElementById('cert-preview-live');
+  if (!wrapper) return;
+  const child = wrapper.firstElementChild;
+  if (!child) return;
+  // On mobile (no sidebar), use full window width minus padding
+  // On desktop, use the wrapper's actual width
+  const isMobile = window.innerWidth <= 768;
+  const sidebarW = isMobile ? 0 : 240;
+  const pagePad = isMobile ? 32 : 80; // account for card padding + margins
+  const availW = Math.min(
+    wrapper.getBoundingClientRect().width || (window.innerWidth - sidebarW - pagePad),
+    window.innerWidth - sidebarW - pagePad
+  );
+  const certW = 800;
+  const scale = Math.min(availW / certW, 1); // never scale up, only down
+  child.style.width = certW + 'px';
+  child.style.transform = 'scale(' + scale + ')';
+  child.style.transformOrigin = 'top left';
+  child.style.boxSizing = 'border-box';
+  const certH = child.offsetHeight || Math.round(certW / 1.414);
+  wrapper.style.height = Math.round(certH * scale) + 'px';
+  wrapper.style.overflow = 'hidden';
+}
+
+// ===== LIVE PREVIEW =====
+function updateCertPreview() {
+  const el = document.getElementById('cert-preview-live');
+  if (!el) return;
+  const data = getFormData();
+  renderCertificate(el, data, currentCertType, currentCertStyle);
+  requestAnimationFrame(scaleCertPreview);
+}
+
+// ===== GENERATE =====
+function generateCertificate() {
+  const data = getFormData();
+  if (!data.student) { showToast('⚠ Please enter the student name.'); return; }
+  const prefix = currentCertType==='quran'?'QUR':'SCH';
+  const certId = prefix+'-'+new Date().getFullYear()+'-'+Math.floor(10000+Math.random()*90000);
+  generatedCertId = certId;
+  data.certId = certId;
+  renderCertificate(document.getElementById('cert-preview-live'), data, currentCertType, currentCertStyle);
+  requestAnimationFrame(scaleCertPreview);
+  document.getElementById('cert-id-display').textContent = certId;
+  const name = data.student||'dear student';
+  document.getElementById('cert-message-box').textContent = currentCertType==='quran'
+    ? `Alhamdulillāh! Congratulations, ${name}, on completing your Qur'ān milestone. Continue striving for knowledge and excellence. Bārakallāhu feekum.`
+    : `Congratulations, ${name}! This certificate recognises your outstanding academic achievement. Keep up the excellent work!`;
+  const dlBtn = document.getElementById('btn-download-png');
+  dlBtn.className = 'cert-action-btn download';
+  dlBtn.style.background = getTheme().primary;
+  dlBtn.style.borderColor = getTheme().primary;
+  document.getElementById('cert-actions-area').style.display = 'block';
+  showToast('✦ Certificate generated successfully!');
+}
+
+// ===== DOWNLOAD =====
+async function downloadCert() {
+  const btn = document.getElementById('btn-download-png');
+  const originalText = btn.innerHTML;
+  btn.innerHTML = '<span class="spinner"></span> Generating...';
+  btn.disabled = true;
+  try {
+    const target = document.getElementById('cert-download-target');
+    target.style.width = '1100px';
+    target.style.height = 'auto';
+    const data = getFormData();
+    data.certId = generatedCertId;
+    renderCertificate(target, data, currentCertType, currentCertStyle);
+    await new Promise(r => setTimeout(r, 300));
+    const certEl = target.firstElementChild;
+    if (!certEl) { showToast('⚠ Could not find certificate element.'); return; }
+    const canvas = await html2canvas(certEl, {
+      scale: 2, useCORS: true, backgroundColor: '#ffffff', logging: false,
+      width: certEl.offsetWidth, height: certEl.offsetHeight,
+    });
+    const link = document.createElement('a');
+    const studentName = (data.student||'Certificate').replace(/[^a-zA-Z0-9]/g,'_');
+    link.download = `${currentCertType==='quran'?'Quran':'School'}_Certificate_${studentName}_${generatedCertId||'cert'}.jpg`;
+    link.href = canvas.toDataURL('image/jpeg', 0.95);
+    link.click();
+    showToast('✓ Certificate downloaded as JPEG!');
+    target.innerHTML = '';
+  } catch(e) {
+    showToast('⚠ Download failed. Please try again.');
+    console.error(e);
+  } finally {
+    btn.innerHTML = originalText;
+    btn.disabled = false;
+  }
+}
+
+async function shareWhatsApp() {
+  const btn = document.querySelector('.cert-action-btn.whatsapp');
+  const originalText = btn ? btn.innerHTML : '';
+  if (btn) { btn.innerHTML = '<span class="spinner"></span> Preparing…'; btn.disabled = true; }
+  try {
+    const data = getFormData();
+    data.certId = generatedCertId;
+
+    // Render at full quality in hidden target
+    const target = document.getElementById('cert-download-target');
+    target.style.width = '1100px';
+    target.style.height = 'auto';
+    renderCertificate(target, data, currentCertType, currentCertStyle);
+    await new Promise(r => setTimeout(r, 300));
+    const certEl = target.firstElementChild;
+    if (!certEl) throw new Error('No cert element');
+
+    const canvas = await html2canvas(certEl, {
+      scale: 2, useCORS: true, backgroundColor: '#ffffff', logging: false,
+      width: certEl.offsetWidth, height: certEl.offsetHeight,
+    });
+    target.innerHTML = '';
+
+    const studentName = (data.student||'Certificate').replace(/[^a-zA-Z0-9]/g,'_');
+    const filename = `${currentCertType==='quran'?'Quran':'School'}_Certificate_${studentName}_${generatedCertId||'cert'}.jpg`;
+    const achievement = currentCertType==='quran'?(data.achievement||"a Qur'ān achievement"):(data.award||'an academic achievement');
+    const shareText = `🎉 Congratulations to ${data.student||'the student'} on ${achievement}!
+Certificate ID: ${generatedCertId||'—'}
+Issued by: ${data.instName}
+Powered by Abu Zayd Solutions.`;
+
+    // Convert canvas to Blob (JPEG)
+    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.95));
+    const file = new File([blob], filename, { type: 'image/jpeg' });
+
+    // Try Web Share API with file (works on Android Chrome → shares image directly to WhatsApp)
+    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({
+        files: [file],
+        title: filename,
+        text: shareText,
+      });
+      showToast('✓ Certificate shared!');
+    } else {
+      // Fallback: download image, then open WhatsApp with text
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(url), 5000);
+      await new Promise(r => setTimeout(r, 800));
+      const msg = encodeURIComponent(shareText + '\n\n📎 Certificate image saved to your device — please attach it in WhatsApp.');
+      window.open(`https://wa.me/?text=${msg}`, '_blank');
+      showToast('✓ Image saved! Now attach it in WhatsApp.');
+    }
+  } catch(e) {
+    if (e.name !== 'AbortError') {
+      showToast('⚠ Could not share. Try downloading instead.');
+      console.error(e);
+    }
+  } finally {
+    if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
+  }
+}
+
+function copyLink() {
+  navigator.clipboard.writeText(`Certificate ID: ${generatedCertId||'—'} — Abu Zayd Solutions Certificate Platform`)
+    .then(()=>showToast('🔗 Certificate info copied!'))
+    .catch(()=>showToast('Copy not supported in this browser.'));
+}
+
+function verifyCertificate() {
+  const val = document.getElementById('verify-input')?.value.trim();
+  if (!val) { showToast('Please enter a Certificate ID.'); return; }
+  document.getElementById('verify-result').style.display='block';
+}
+
+// ===== TOAST =====
+function showToast(msg,duration=3000) {
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),duration);
+}
+
+// ===== INIT =====
+window.addEventListener('DOMContentLoaded', () => {
+  const session = getLoggedIn();
+  if (session) applySession(session);
+  const sampleEl = document.getElementById('sample-cert');
+  if (sampleEl) {
+    renderQuranCertificate(sampleEl, {student:'Fatimah Ahmad',achievement:"Completion of Surah Al-Fātiḥah",teacher:'Ustadh Abdullah Kareem',date:'2025-01-14',instName:'Noor ul-Islam Academy',instPhone:'+234 803 123 4567',certId:'QUR-2025-08741'});
+  }
+  window.addEventListener('resize', scaleCertPreview);
+  setTimeout(() => {
+    const dateInput = document.getElementById('cert-date');
+    if (dateInput && !dateInput.value) dateInput.value = new Date().toISOString().split('T')[0];
+    updateCertPreview();
+  }, 200);
+});
+</script>
+
+</body>
+</html>
