@@ -1396,14 +1396,56 @@ function qrDots(t) { return QP.map(c=>`<div style="background:${c?t.dark:'transp
 // ===== STYLE RENDERERS =====
 
 // CLASSIC — elegant bordered Islamic style
+// Returns font sizes as px strings, scaled to the certificate container width.
+// Using px (not em) prevents cascading shrinkage on mobile/download.
+// isQ=true → Madrasah/Quran cert (larger), isQ=false → School cert (original size)
+function certFontSizes(isQ) {
+  const dlTarget = document.getElementById('cert-download-target');
+  const w = (dlTarget && dlTarget.offsetWidth > 100) ? dlTarget.offsetWidth : 800;
+  const r = w / 2400;
+  const px = (n) => Math.round(n * r) + 'px';
+  if (isQ) {
+    // Madrasah — bigger, bolder
+    return {
+      studentName : px(100),
+      achievement : px(64),
+      instName    : px(46),
+      certTitle   : px(32),
+      arabic      : px(42),
+      label       : px(28),
+      body        : px(28),
+      sig         : px(28),
+      small       : px(22),
+      congrats    : px(24),
+      tiny        : px(16),
+    };
+  } else {
+    // School — keep original proportions
+    return {
+      studentName : px(82),
+      achievement : px(52),
+      instName    : px(38),
+      certTitle   : px(26),
+      arabic      : px(34),
+      label       : px(22),
+      body        : px(22),
+      sig         : px(22),
+      small       : px(18),
+      congrats    : px(20),
+      tiny        : px(14),
+    };
+  }
+}
+
 function renderClassic(data, certType, t) {
   const isQ = certType==='quran';
   const title = isQ?'Certificate of Achievement':'Certificate of Excellence';
   const subtitle = isQ?'شهادة إنجاز':'Academic Achievement Award';
-  const congrats = `<div style="font-family:'Cormorant Garamond',serif;font-size:13px;font-style:italic;color:${t.mid};margin-top:6px;padding:4px 10px;border-left:2px solid ${t.accent}60;">We are truly proud of you. Do not stop here — we look forward to seeing you rise even higher. Congratulations! 🌟</div>`;
+  const S = certFontSizes(isQ);
+  const congrats = `<div style="font-family:'Cormorant Garamond',serif;font-size:${S.congrats};font-style:italic;font-weight:700;color:${t.dark};margin-top:6px;padding:5px 10px;border-left:3px solid ${t.accent};background:${t.pale};">We are truly proud of you. Do not stop here — we look forward to seeing you rise even higher. Congratulations! 🌟</div>`;
   const bodyText = isQ
-    ? `<span style="font-size:13px;color:#555;">For successfully completing</span><br><strong style="font-size:18px;color:${t.primary};font-family:'Cormorant Garamond',serif;">${data.achievement||'Achievement Title'}</strong>${congrats}`
-    : `<span style="font-size:13px;color:#555;">In recognition of outstanding achievement in</span><br><strong style="font-size:18px;color:${t.primary};font-family:'Cormorant Garamond',serif;">${data.award||'Award Title'}</strong>${data.grade?`<br><span style="font-size:13px;color:${t.accent};font-weight:700;">Grade: ${data.grade}</span>`:''}${congrats}`;
+    ? `<span style="font-size:${S.label};font-weight:700;color:${t.mid};">For successfully completing</span><br><strong style="font-size:${S.achievement};color:${t.primary};font-weight:900;">${data.achievement||'Achievement Title'}</strong>${congrats}`
+    : `<span style="font-size:${S.label};font-weight:700;color:${t.mid};">In recognition of outstanding achievement in</span><br><strong style="font-size:${S.achievement};color:${t.primary};font-weight:900;">${data.award||'Award Title'}</strong>${data.grade?`<br><span style="font-size:${S.label};color:${t.accent};font-weight:700;">Grade: ${data.grade}</span>`:''}${congrats}`;
   const footer = isQ?`بَارَكَ اللهُ فِيكُم`:`${data.term||''}`;
 
   return `<div style="width:100%;aspect-ratio:1.414;background:#fffef8;border:3px solid ${t.accent};border-radius:4px;position:relative;overflow:hidden;font-family:'Cormorant Garamond',serif;box-sizing:border-box;">
@@ -1414,37 +1456,37 @@ function renderClassic(data, certType, t) {
     <div style="position:absolute;bottom:14px;right:14px;width:28px;height:28px;border-bottom:2.5px solid ${t.accent};border-right:2.5px solid ${t.accent};"></div>
     <div style="position:absolute;inset:22px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:8px 24px;text-align:center;">
       <div style="width:100%;">
-        <div style="width:46px;height:46px;margin:0 auto 4px;background:${t.light};border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;">${isQ?'🕌':'🎓'}</div>
-        <div style="font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;color:${t.dark};">${data.instName}</div>
-        <div style="font-family:'DM Sans',sans-serif;font-size:12px;color:#777;font-weight:600;">${data.instPhone}</div>
+        <div style="width:46px;height:46px;margin:0 auto 4px;background:${t.light};border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;">${isQ?'🕌':'🎓'}</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:${S.instName};font-weight:700;color:${t.dark};">${data.instName}</div>
+        <div style="font-family:'DM Sans',sans-serif;font-size:${S.small};font-weight:700;color:${t.mid};">${data.instPhone}</div>
       </div>
       <div style="width:90%;height:1px;background:linear-gradient(to right,transparent,${t.accent},transparent);"></div>
       <div>
-        <div style="font-size:15px;font-weight:700;color:${t.accent};letter-spacing:2px;text-transform:uppercase;">${title}</div>
-        <div style="font-family:'Amiri',serif;font-size:18px;color:${t.primary};margin-top:2px;">${subtitle}</div>
-        <div style="font-family:'DM Sans',sans-serif;font-size:12px;color:#777;margin-top:4px;font-weight:500;">This certificate is proudly presented to</div>
+        <div style="font-size:${S.certTitle};font-weight:700;color:${t.accent};letter-spacing:2px;text-transform:uppercase;">${title}</div>
+        <div style="font-family:'Amiri',serif;font-size:${S.arabic};color:${t.primary};margin-top:2px;">${subtitle}</div>
+        <div style="font-family:'DM Sans',sans-serif;font-size:${S.label};font-weight:700;color:${t.mid};margin-top:4px;">This certificate is proudly presented to</div>
       </div>
-      <div style="font-size:26px;font-weight:700;font-style:italic;color:${t.dark};border-bottom:1.5px solid ${t.accent};padding-bottom:2px;">${data.student||'Student Name'}</div>
-      <div style="font-family:'DM Sans',sans-serif;font-size:13px;line-height:1.7;">${bodyText}</div>
-      <div style="font-family:'Amiri',serif;font-size:17px;color:${t.accent};font-weight:700;">${footer}</div>
+      <div style="font-size:${S.studentName};font-weight:900;font-style:italic;color:${t.dark};border-bottom:2px solid ${t.accent};padding-bottom:2px;letter-spacing:0.3px;">${data.student||'Student Name'}</div>
+      <div style="font-family:'DM Sans',sans-serif;font-size:${S.body};font-weight:700;line-height:1.8;">${bodyText}</div>
+      <div style="font-family:'Amiri',serif;font-size:${S.arabic};font-weight:700;color:${t.accent};">${footer}</div>
       <div style="width:90%;height:1px;background:linear-gradient(to right,transparent,${t.accent},transparent);"></div>
       <div style="width:100%;display:flex;justify-content:space-between;align-items:flex-end;">
         <div style="text-align:center;">
           <div style="width:80px;height:1px;background:${t.dark};margin:0 auto 2px;"></div>
-          <div style="font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;color:${t.dark};">${data.teacher||'Teacher'}</div>
-          <div style="font-family:'DM Sans',sans-serif;font-size:11px;color:#777;font-weight:500;">${isQ?'Teacher / Ustadh':'Class Teacher'}</div>
+          <div style="font-family:'DM Sans',sans-serif;font-size:${S.sig};font-weight:700;color:${t.dark};">${data.teacher||'Teacher'}</div>
+          <div style="font-family:'DM Sans',sans-serif;font-size:${S.small};font-weight:700;color:${t.mid};">${isQ?'Teacher / Ustadh':'Class Teacher'}</div>
         </div>
         <div style="text-align:center;">
-          <div style="font-family:'DM Sans',sans-serif;font-size:11px;color:#777;font-weight:500;">Date Issued</div>
-          <div style="font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;color:${t.dark};">${fmtDate(data.date)}</div>
-          ${data.certId?`<div style="font-family:'DM Sans',sans-serif;font-size:10px;color:#aaa;margin-top:1px;font-weight:600;">${data.certId}</div>`:''}
+          <div style="font-family:'DM Sans',sans-serif;font-size:${S.small};font-weight:700;color:${t.mid};">Date Issued</div>
+          <div style="font-family:'DM Sans',sans-serif;font-size:${S.sig};font-weight:700;color:${t.dark};">${fmtDate(data.date)}</div>
+          ${data.certId?`<div style="font-family:'DM Sans',sans-serif;font-size:${S.tiny};font-weight:600;color:${t.mid};margin-top:1px;">${data.certId}</div>`:''}
         </div>
         ${data.principal
-          ? `<div style="text-align:center;"><div style="width:80px;height:1px;background:${t.dark};margin:0 auto 2px;"></div><div style="font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;color:${t.dark};">${data.principal}</div><div style="font-family:'DM Sans',sans-serif;font-size:11px;color:#777;font-weight:500;">Principal</div></div>`
+          ? `<div style="text-align:center;"><div style="width:80px;height:1px;background:${t.dark};margin:0 auto 2px;"></div><div style="font-family:'DM Sans',sans-serif;font-size:${S.sig};font-weight:700;color:${t.dark};">${data.principal}</div><div style="font-family:'DM Sans',sans-serif;font-size:${S.small};font-weight:700;color:${t.mid};">Principal</div></div>`
           : `<div style="width:36px;height:36px;border:1px solid ${t.accent}80;border-radius:2px;display:grid;grid-template-columns:repeat(5,1fr);gap:1.5px;padding:3px;margin:0 auto 2px;">${qrDots(t)}</div>`
         }
       </div>
-      <div style="font-family:'DM Sans',sans-serif;font-size:11px;color:#888;font-weight:600;letter-spacing:0.3px;">✦ Powered by Abu Zayd Solutions · www.abuzaydsolutions.com</div>
+      <div style="font-family:'DM Sans',sans-serif;font-size:${S.tiny};color:${t.mid};font-weight:600;letter-spacing:0.3px;">✦ Powered by Abu Zayd Solutions · www.abuzaydsolutions.com</div>
     </div>
   </div>`;
 }
@@ -1452,45 +1494,47 @@ function renderClassic(data, certType, t) {
 // MODERN — dark sidebar accent, clean
 function renderModern(data, certType, t) {
   const isQ = certType==='quran';
+  const S = certFontSizes(isQ);
+  const congrats = `<div style="font-family:'Cormorant Garamond',serif;font-size:${S.congrats};font-style:italic;font-weight:700;color:${t.dark};margin-top:5px;padding:5px 10px;border-left:3px solid ${t.accent};background:${t.pale};">We are truly proud of you. Do not stop here — we look forward to seeing you rise even higher. Congratulations! 🌟</div>`;
   return `<div style="width:100%;aspect-ratio:1.414;background:#fff;border:2px solid ${t.dark};border-radius:4px;position:relative;overflow:hidden;font-family:'DM Sans',sans-serif;box-sizing:border-box;display:flex;">
     <div style="width:12px;background:linear-gradient(to bottom,${t.mid},${t.dark});flex-shrink:0;"></div>
     <div style="flex:1;display:flex;flex-direction:column;padding:16px 20px 10px;position:relative;">
       <div style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(to right,${t.accent},${t.accentLight},${t.accent});"></div>
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;margin-top:6px;">
-        <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,${t.dark},${t.mid});display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">${isQ?'🕌':'🎓'}</div>
+        <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,${t.dark},${t.mid});display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;">${isQ?'🕌':'🎓'}</div>
         <div>
-          <div style="font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;color:${t.dark};">${data.instName}</div>
-          <div style="font-size:12px;color:#888;font-weight:600;">${data.instPhone}</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:${S.instName};font-weight:700;color:${t.dark};">${data.instName}</div>
+          <div style="font-size:${S.small};font-weight:700;color:${t.mid};">${data.instPhone}</div>
         </div>
         <div style="margin-left:auto;text-align:right;">
-          <div style="font-size:11px;color:#aaa;font-weight:600;">Certificate ID</div>
-          <div style="font-size:11px;font-weight:700;color:${t.mid};">${data.certId||'—'}</div>
+          <div style="font-size:${S.tiny};font-weight:700;color:${t.mid};">Certificate ID</div>
+          <div style="font-size:${S.tiny};font-weight:700;color:${t.mid};">${data.certId||'—'}</div>
         </div>
       </div>
       <div style="height:1px;background:${t.light};margin-bottom:10px;"></div>
       <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:6px;">
-        <div style="font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:${t.mid};">CERTIFICATE OF ${isQ?'ACHIEVEMENT':'EXCELLENCE'}</div>
-        <div style="font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;font-style:italic;color:${t.dark};line-height:1.1;">${data.student||'Student Name'}</div>
-        <div style="font-size:13px;color:#666;font-weight:500;">${isQ?'has successfully completed':'is recognised for outstanding achievement in'}</div>
-        <div style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:${t.primary};">${isQ?(data.achievement||'Achievement Title'):(data.award||'Award Title')}</div>
-        ${isQ?`<div style="font-family:'Amiri',serif;font-size:16px;color:${t.accent};margin-top:2px;font-weight:700;">بَارَكَ اللهُ فِيكُم</div>`:(data.grade?`<div style="display:inline-block;background:linear-gradient(135deg,${t.dark},${t.mid});color:white;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:700;margin-top:2px;">Grade: ${data.grade}</div>`:'')}
-        ${data.term?`<div style="font-size:12px;color:#999;font-weight:600;">${data.term}</div>`:''}
-        <div style="font-family:'Cormorant Garamond',serif;font-size:13px;font-style:italic;color:${t.mid};margin-top:4px;padding:4px 10px;border-left:2px solid ${t.accent}60;">We are truly proud of you. Do not stop here — we look forward to seeing you rise even higher. Congratulations! 🌟</div>
+        <div style="font-size:${S.certTitle};font-weight:700;letter-spacing:2px;text-transform:uppercase;color:${t.mid};">CERTIFICATE OF ${isQ?'ACHIEVEMENT':'EXCELLENCE'}</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:${S.studentName};font-weight:900;font-style:italic;color:${t.dark};line-height:1.1;">${data.student||'Student Name'}</div>
+        <div style="font-size:${S.label};font-weight:700;color:${t.mid};">${isQ?'has successfully completed':'is recognised for outstanding achievement in'}</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:${S.achievement};font-weight:900;color:${t.primary};">${isQ?(data.achievement||'Achievement Title'):(data.award||'Award Title')}</div>
+        ${isQ?`<div style="font-family:'Amiri',serif;font-size:${S.arabic};color:${t.accent};margin-top:2px;">بَارَكَ اللهُ فِيكُم</div>`:(data.grade?`<div style="display:inline-block;background:linear-gradient(135deg,${t.dark},${t.mid});color:white;padding:2px 10px;border-radius:20px;font-size:${S.small};font-weight:700;margin-top:2px;">Grade: ${data.grade}</div>`:'')}
+        ${data.term?`<div style="font-size:${S.small};font-weight:700;color:${t.mid};">${data.term}</div>`:''}
+        ${congrats}
       </div>
       <div style="height:1px;background:${t.light};margin:8px 0;"></div>
       <div style="display:flex;justify-content:space-between;align-items:center;">
         <div>
           <div style="width:70px;height:1px;background:${t.dark};margin-bottom:2px;"></div>
-          <div style="font-size:12px;font-weight:700;color:${t.dark};">${data.teacher||'Teacher'}</div>
-          <div style="font-size:11px;color:#999;font-weight:500;">${isQ?'Teacher / Ustadh':'Class Teacher'}</div>
+          <div style="font-size:${S.sig};font-weight:700;color:${t.dark};">${data.teacher||'Teacher'}</div>
+          <div style="font-size:${S.small};font-weight:700;color:${t.mid};">${isQ?'Teacher / Ustadh':'Class Teacher'}</div>
         </div>
-        ${data.principal?`<div><div style="width:70px;height:1px;background:${t.dark};margin-bottom:2px;"></div><div style="font-size:12px;font-weight:700;color:${t.dark};">${data.principal}</div><div style="font-size:11px;color:#999;font-weight:500;">Principal</div></div>`:`<div style="width:40px;height:40px;border:2px solid ${t.dark};border-radius:50%;display:flex;align-items:center;justify-content:center;"><span style="font-size:9px;font-weight:700;color:${t.dark};text-align:center;line-height:1.2;">SEAL</span></div>`}
+        ${data.principal?`<div><div style="width:70px;height:1px;background:${t.dark};margin-bottom:2px;"></div><div style="font-size:${S.sig};font-weight:700;color:${t.dark};">${data.principal}</div><div style="font-size:${S.small};font-weight:700;color:${t.mid};">Principal</div></div>`:`<div style="width:40px;height:40px;border:2px solid ${t.dark};border-radius:50%;display:flex;align-items:center;justify-content:center;"><span style="font-size:${S.tiny};font-weight:700;color:${t.dark};text-align:center;line-height:1.1;">SEAL</span></div>`}
         <div style="text-align:right;">
-          <div style="font-size:11px;color:#aaa;font-weight:500;">Date Issued</div>
-          <div style="font-size:12px;font-weight:700;color:${t.dark};">${fmtDate(data.date)}</div>
+          <div style="font-size:${S.small};font-weight:700;color:${t.mid};">Date Issued</div>
+          <div style="font-size:${S.sig};font-weight:700;color:${t.dark};">${fmtDate(data.date)}</div>
         </div>
       </div>
-      <div style="font-size:11px;color:#999;font-weight:600;text-align:center;margin-top:4px;letter-spacing:0.3px;">✦ Powered by Abu Zayd Solutions · www.abuzaydsolutions.com</div>
+      <div style="font-size:${S.tiny};color:${t.mid};font-weight:600;text-align:center;margin-top:4px;letter-spacing:0.3px;">✦ Powered by Abu Zayd Solutions · www.abuzaydsolutions.com</div>
     </div>
   </div>`;
 }
@@ -1498,6 +1542,8 @@ function renderModern(data, certType, t) {
 // ELEGANT — cream/parchment, ornate gold lines
 function renderElegant(data, certType, t) {
   const isQ = certType==='quran';
+  const S = certFontSizes(isQ);
+  const congrats = `<div style="font-family:'Cormorant Garamond',serif;font-size:${S.congrats};font-style:italic;font-weight:700;color:${t.dark};margin-top:5px;padding:5px 10px;border-left:3px solid ${t.accent};background:${t.pale};">We are truly proud of you. Do not stop here — we look forward to seeing you rise even higher. Congratulations! 🌟</div>`;
   return `<div style="width:100%;aspect-ratio:1.414;background:linear-gradient(160deg,#fffdf5,#fdf5e6,#fffdf5);border:3px double ${t.accent};border-radius:4px;position:relative;overflow:hidden;font-family:'Cormorant Garamond',serif;box-sizing:border-box;">
     <div style="position:absolute;inset:6px;border:1px solid ${t.accent}40;border-radius:2px;"></div>
     <div style="position:absolute;top:0;left:0;right:0;height:8px;background:linear-gradient(to right,${t.dark},${t.mid},${t.dark});opacity:0.9;"></div>
@@ -1505,47 +1551,47 @@ function renderElegant(data, certType, t) {
     <div style="position:absolute;inset:16px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:10px 28px;text-align:center;">
       <div>
         <div style="width:50px;height:50px;margin:0 auto 3px;background:linear-gradient(135deg,${t.dark},${t.mid});border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;color:white;">${isQ?'🕌':'🎓'}</div>
-        <div style="font-size:17px;font-weight:700;color:${t.dark};letter-spacing:0.5px;">${data.instName}</div>
-        <div style="font-family:'DM Sans',sans-serif;font-size:12px;color:#888;font-weight:600;">${data.instPhone}</div>
+        <div style="font-size:${S.instName};font-weight:700;color:${t.dark};letter-spacing:0.5px;">${data.instName}</div>
+        <div style="font-family:'DM Sans',sans-serif;font-size:${S.small};font-weight:700;color:${t.mid};">${data.instPhone}</div>
       </div>
       <div style="width:70%;display:flex;align-items:center;gap:6px;">
         <div style="flex:1;height:1px;background:${t.accent};"></div>
-        <div style="font-size:16px;color:${t.accent};">✦</div>
+        <div style="font-size:0.8em;color:${t.accent};">✦</div>
         <div style="flex:1;height:1px;background:${t.accent};"></div>
       </div>
       <div>
-        <div style="font-size:12px;font-family:'DM Sans',sans-serif;letter-spacing:3px;text-transform:uppercase;color:#888;font-weight:700;margin-bottom:3px;">${isQ?'CERTIFICATE OF ACHIEVEMENT':'CERTIFICATE OF EXCELLENCE'}</div>
-        ${isQ?`<div style="font-family:'Amiri',serif;font-size:20px;color:${t.primary};direction:rtl;font-weight:700;">شهادة إنجاز</div>`:`<div style="font-size:15px;color:${t.mid};font-style:italic;font-weight:600;">Academic Achievement Award</div>`}
-        <div style="font-family:'DM Sans',sans-serif;font-size:12px;color:#999;margin-top:4px;font-weight:500;">This certificate is proudly presented to</div>
+        <div style="font-size:${S.certTitle};font-family:'DM Sans',sans-serif;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:${t.mid};margin-bottom:3px;">${isQ?'CERTIFICATE OF ACHIEVEMENT':'CERTIFICATE OF EXCELLENCE'}</div>
+        ${isQ?`<div style="font-family:'Amiri',serif;font-size:${S.arabic};color:${t.primary};direction:rtl;">شهادة إنجاز</div>`:`<div style="font-size:${S.label};font-weight:700;color:${t.mid};font-style:italic;">Academic Achievement Award</div>`}
+        <div style="font-family:'DM Sans',sans-serif;font-size:${S.label};font-weight:700;color:${t.mid};margin-top:4px;">This certificate is proudly presented to</div>
       </div>
-      <div style="font-size:28px;font-weight:700;font-style:italic;color:${t.dark};border-bottom:1px solid ${t.accent};padding-bottom:3px;min-width:200px;">${data.student||'Student Name'}</div>
+      <div style="font-size:${S.studentName};font-weight:900;font-style:italic;color:${t.dark};border-bottom:1px solid ${t.accent};padding-bottom:3px;min-width:200px;">${data.student||'Student Name'}</div>
       <div>
-        <div style="font-family:'DM Sans',sans-serif;font-size:13px;color:#666;font-weight:500;">${isQ?'For the successful completion of':'In recognition of outstanding achievement in'}</div>
-        <div style="font-size:20px;font-weight:700;color:${t.primary};margin-top:2px;">${isQ?(data.achievement||'Achievement Title'):(data.award||'Award Title')}</div>
-        ${data.grade?`<div style="font-family:'DM Sans',sans-serif;font-size:13px;color:${t.accent};font-weight:700;margin-top:2px;">Grade Achieved: ${data.grade}</div>`:''}
-        ${isQ?`<div style="font-family:'Amiri',serif;font-size:16px;color:${t.accent};margin-top:4px;font-weight:700;">بَارَكَ اللهُ فِيكُم</div>`:data.term?`<div style="font-family:'DM Sans',sans-serif;font-size:12px;color:#999;margin-top:2px;font-weight:600;">${data.term}</div>`:''}
-        <div style="font-family:'Cormorant Garamond',serif;font-size:13px;font-style:italic;color:${t.mid};margin-top:5px;padding:4px 10px;border-left:2px solid ${t.accent}60;">We are truly proud of you. Do not stop here — we look forward to seeing you rise even higher. Congratulations! 🌟</div>
+        <div style="font-family:'DM Sans',sans-serif;font-size:${S.label};font-weight:700;color:${t.mid};">${isQ?'For the successful completion of':'In recognition of outstanding achievement in'}</div>
+        <div style="font-size:${S.achievement};font-weight:900;color:${t.primary};margin-top:2px;">${isQ?(data.achievement||'Achievement Title'):(data.award||'Award Title')}</div>
+        ${data.grade?`<div style="font-family:'DM Sans',sans-serif;font-size:${S.small};font-weight:700;color:${t.accent};margin-top:2px;">Grade Achieved: ${data.grade}</div>`:''}
+        ${isQ?`<div style="font-family:'Amiri',serif;font-size:${S.arabic};color:${t.accent};margin-top:4px;">بَارَكَ اللهُ فِيكُم</div>`:data.term?`<div style="font-family:'DM Sans',sans-serif;font-size:${S.small};font-weight:700;color:${t.mid};margin-top:2px;">${data.term}</div>`:''}
+        ${congrats}
       </div>
       <div style="width:70%;display:flex;align-items:center;gap:6px;">
         <div style="flex:1;height:1px;background:${t.accent};"></div>
-        <div style="font-size:16px;color:${t.accent};">✦</div>
+        <div style="font-size:0.8em;color:${t.accent};">✦</div>
         <div style="flex:1;height:1px;background:${t.accent};"></div>
       </div>
       <div style="width:100%;display:flex;justify-content:space-between;align-items:flex-end;">
         <div style="text-align:center;">
           <div style="width:80px;height:1px;background:${t.dark};margin:0 auto 2px;"></div>
-          <div style="font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;color:${t.dark};">${data.teacher||'Teacher'}</div>
-          <div style="font-family:'DM Sans',sans-serif;font-size:11px;color:#999;font-weight:500;">${isQ?'Teacher / Ustadh':'Class Teacher'}</div>
+          <div style="font-family:'DM Sans',sans-serif;font-size:${S.sig};font-weight:700;color:${t.dark};">${data.teacher||'Teacher'}</div>
+          <div style="font-family:'DM Sans',sans-serif;font-size:${S.small};font-weight:700;color:${t.mid};">${isQ?'Teacher / Ustadh':'Class Teacher'}</div>
         </div>
         <div style="text-align:center;">
-          <div style="font-size:20px;color:${t.accent};">❋</div>
-          <div style="font-family:'DM Sans',sans-serif;font-size:12px;color:${t.dark};font-weight:700;">${fmtDate(data.date)}</div>
-          <div style="font-family:'DM Sans',sans-serif;font-size:10px;color:#aaa;font-weight:600;">${data.certId||''}</div>
+          <div style="font-size:1.2em;color:${t.accent};">❋</div>
+          <div style="font-family:'DM Sans',sans-serif;font-size:${S.sig};font-weight:700;color:${t.dark};">${fmtDate(data.date)}</div>
+          <div style="font-family:'DM Sans',sans-serif;font-size:${S.tiny};font-weight:600;color:${t.mid};">${data.certId||''}</div>
         </div>
-        ${data.principal?`<div style="text-align:center;"><div style="width:80px;height:1px;background:${t.dark};margin:0 auto 2px;"></div><div style="font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;color:${t.dark};">${data.principal}</div><div style="font-family:'DM Sans',sans-serif;font-size:11px;color:#999;font-weight:500;">Principal</div></div>`
-        :`<div style="width:46px;height:46px;border-radius:50%;border:2px dashed ${t.accent};display:flex;align-items:center;justify-content:center;"><span style="font-family:'DM Sans',sans-serif;font-size:9px;font-weight:700;color:${t.accent};text-align:center;line-height:1.3;">OFFICIAL<br>SEAL</span></div>`}
+        ${data.principal?`<div style="text-align:center;"><div style="width:80px;height:1px;background:${t.dark};margin:0 auto 2px;"></div><div style="font-family:'DM Sans',sans-serif;font-size:${S.sig};font-weight:700;color:${t.dark};">${data.principal}</div><div style="font-family:'DM Sans',sans-serif;font-size:${S.small};font-weight:700;color:${t.mid};">Principal</div></div>`
+        :`<div style="width:46px;height:46px;border-radius:50%;border:2px dashed ${t.accent};display:flex;align-items:center;justify-content:center;"><span style="font-family:'DM Sans',sans-serif;font-size:${S.tiny};font-weight:700;color:${t.accent};text-align:center;line-height:1.2;">OFFICIAL<br>SEAL</span></div>`}
       </div>
-      <div style="font-family:'DM Sans',sans-serif;font-size:11px;color:#888;font-weight:600;letter-spacing:0.3px;">✦ Powered by Abu Zayd Solutions · www.abuzaydsolutions.com</div>
+      <div style="font-family:'DM Sans',sans-serif;font-size:${S.tiny};color:${t.mid};font-weight:600;letter-spacing:0.3px;">✦ Powered by Abu Zayd Solutions · www.abuzaydsolutions.com</div>
     </div>
   </div>`;
 }
@@ -1553,44 +1599,46 @@ function renderElegant(data, certType, t) {
 // BOLD — strong header band, modern academic
 function renderBold(data, certType, t) {
   const isQ = certType==='quran';
+  const S = certFontSizes(isQ);
+  const congrats = `<div style="font-family:'Cormorant Garamond',serif;font-size:${S.congrats};font-style:italic;font-weight:700;color:${t.dark};margin-top:5px;padding:5px 10px;border-left:3px solid ${t.accent};background:${t.pale};">We are truly proud of you. Do not stop here — we look forward to seeing you rise even higher. Congratulations! 🌟</div>`;
   return `<div style="width:100%;aspect-ratio:1.414;background:white;border-radius:4px;overflow:hidden;font-family:'DM Sans',sans-serif;box-sizing:border-box;display:flex;flex-direction:column;border:2px solid ${t.dark};">
-    <div style="background:linear-gradient(135deg,${t.dark},${t.mid});padding:14px 20px;display:flex;align-items:center;gap:12px;flex-shrink:0;">
-      <div style="width:44px;height:44px;border-radius:50%;border:2px solid ${t.accent};display:flex;align-items:center;justify-content:center;font-size:20px;background:rgba(255,255,255,0.12);">${isQ?'🕌':'🎓'}</div>
+    <div style="background:linear-gradient(135deg,${t.dark},${t.mid});padding:12px 20px;display:flex;align-items:center;gap:12px;flex-shrink:0;">
+      <div style="width:42px;height:42px;border-radius:50%;border:2px solid ${t.accent};display:flex;align-items:center;justify-content:center;font-size:18px;background:rgba(255,255,255,0.12);">${isQ?'🕌':'🎓'}</div>
       <div style="flex:1;">
-        <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:white;letter-spacing:0.3px;">${data.instName}</div>
-        <div style="font-size:12px;color:rgba(255,255,255,0.65);font-weight:500;">${data.instPhone}</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:${S.instName};font-weight:700;color:white;letter-spacing:0.3px;">${data.instName}</div>
+        <div style="font-size:${S.small};font-weight:700;color:rgba(255,255,255,0.85);">${data.instPhone}</div>
       </div>
-      ${isQ?`<div style="font-family:'Amiri',serif;font-size:20px;color:${t.accentLight};direction:rtl;font-weight:700;">شهادة إنجاز</div>`:`<div style="font-size:12px;color:${t.accentLight};font-weight:700;letter-spacing:1px;text-transform:uppercase;">Academic Award</div>`}
+      ${isQ?`<div style="font-family:'Amiri',serif;font-size:${S.arabic};color:${t.accentLight};direction:rtl;">شهادة إنجاز</div>`:`<div style="font-size:${S.small};color:${t.accentLight};font-weight:700;letter-spacing:1px;text-transform:uppercase;">Academic Award</div>`}
     </div>
-    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 28px;text-align:center;gap:7px;position:relative;">
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 28px;text-align:center;gap:6px;position:relative;">
       <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(to right,${t.accent},${t.accentLight},${t.accent});"></div>
-      <div style="font-size:12px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:${t.mid};">CERTIFICATE OF ${isQ?'ACHIEVEMENT':'EXCELLENCE'}</div>
-      <div style="font-family:'DM Sans',sans-serif;font-size:13px;color:#888;font-weight:500;">This certificate is proudly presented to</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;font-style:italic;color:${t.dark};margin:2px 0;">${data.student||'Student Name'}</div>
+      <div style="font-size:${S.certTitle};font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:${t.mid};">CERTIFICATE OF ${isQ?'ACHIEVEMENT':'EXCELLENCE'}</div>
+      <div style="font-family:'DM Sans',sans-serif;font-size:${S.label};font-weight:700;color:${t.mid};">This certificate is proudly presented to</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:${S.studentName};font-weight:900;font-style:italic;color:${t.dark};margin:2px 0;">${data.student||'Student Name'}</div>
       <div style="width:60px;height:3px;background:linear-gradient(to right,${t.accent},${t.accentLight});border-radius:2px;"></div>
-      <div style="font-size:13px;color:#777;font-weight:500;">${isQ?'For successfully completing':'In recognition of outstanding achievement in'}</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:${t.primary};">${isQ?(data.achievement||'Achievement Title'):(data.award||'Award Title')}</div>
-      ${data.grade?`<div style="background:linear-gradient(135deg,${t.dark},${t.mid});color:white;padding:4px 16px;border-radius:20px;font-size:12px;font-weight:700;">Grade: ${data.grade}</div>`:''}
-      ${data.term?`<div style="font-size:12px;color:#aaa;font-weight:600;">${data.term}</div>`:''}
-      ${isQ?`<div style="font-family:'Amiri',serif;font-size:17px;color:${t.accent};margin-top:2px;font-weight:700;">بَارَكَ اللهُ فِيكُم</div>`:''}
-      <div style="font-family:'Cormorant Garamond',serif;font-size:13px;font-style:italic;color:${t.mid};margin-top:3px;padding:4px 12px;border-left:2px solid ${t.accent}60;">We are truly proud of you. Do not stop here — we look forward to seeing you rise even higher. Congratulations! 🌟</div>
+      <div style="font-size:${S.label};font-weight:700;color:${t.mid};">${isQ?'For successfully completing':'In recognition of outstanding achievement in'}</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:${S.achievement};font-weight:900;color:${t.primary};">${isQ?(data.achievement||'Achievement Title'):(data.award||'Award Title')}</div>
+      ${data.grade?`<div style="background:linear-gradient(135deg,${t.dark},${t.mid});color:white;padding:3px 14px;border-radius:20px;font-size:${S.small};font-weight:700;">Grade: ${data.grade}</div>`:''}
+      ${data.term?`<div style="font-size:${S.small};font-weight:700;color:${t.mid};">${data.term}</div>`:''}
+      ${isQ?`<div style="font-family:'Amiri',serif;font-size:${S.arabic};color:${t.accent};margin-top:2px;">بَارَكَ اللهُ فِيكُم</div>`:''}
+      ${congrats}
     </div>
-    <div style="background:${t.pale};border-top:1px solid ${t.light};padding:10px 20px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;">
+    <div style="background:${t.pale};border-top:1px solid ${t.light};padding:8px 20px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;">
       <div style="text-align:center;">
         <div style="width:72px;height:1px;background:${t.dark};margin:0 auto 2px;"></div>
-        <div style="font-size:12px;font-weight:700;color:${t.dark};">${data.teacher||'Teacher'}</div>
-        <div style="font-size:11px;color:#aaa;font-weight:500;">${isQ?'Teacher / Ustadh':'Class Teacher'}</div>
+        <div style="font-size:${S.sig};font-weight:700;color:${t.dark};">${data.teacher||'Teacher'}</div>
+        <div style="font-size:${S.small};font-weight:700;color:${t.mid};">${isQ?'Teacher / Ustadh':'Class Teacher'}</div>
       </div>
       <div style="text-align:center;">
-        <div style="font-family:'Cormorant Garamond',serif;font-size:13px;color:#999;margin-bottom:1px;">Date of Issue</div>
-        <div style="font-size:12px;font-weight:700;color:${t.dark};">${fmtDate(data.date)}</div>
-        <div style="font-size:10px;color:#bbb;margin-top:1px;font-weight:600;">${data.certId||''}</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:${S.small};font-weight:700;color:${t.mid};margin-bottom:1px;">Date of Issue</div>
+        <div style="font-size:${S.sig};font-weight:700;color:${t.dark};">${fmtDate(data.date)}</div>
+        <div style="font-size:${S.tiny};font-weight:600;color:${t.mid};margin-top:1px;">${data.certId||''}</div>
       </div>
-      ${data.principal?`<div style="text-align:center;"><div style="width:72px;height:1px;background:${t.dark};margin:0 auto 2px;"></div><div style="font-size:12px;font-weight:700;color:${t.dark};">${data.principal}</div><div style="font-size:11px;color:#aaa;font-weight:500;">Principal</div></div>`
-      :`<div style="width:44px;height:44px;border-radius:50%;border:2px solid ${t.dark};background:white;display:flex;align-items:center;justify-content:center;"><span style="font-size:9px;font-weight:700;color:${t.dark};text-align:center;line-height:1.2;">OFFICIAL<br>SEAL</span></div>`}
+      ${data.principal?`<div style="text-align:center;"><div style="width:72px;height:1px;background:${t.dark};margin:0 auto 2px;"></div><div style="font-size:${S.sig};font-weight:700;color:${t.dark};">${data.principal}</div><div style="font-size:${S.small};font-weight:700;color:${t.mid};">Principal</div></div>`
+      :`<div style="width:44px;height:44px;border-radius:50%;border:2px solid ${t.dark};background:white;display:flex;align-items:center;justify-content:center;"><span style="font-size:${S.tiny};font-weight:700;color:${t.dark};text-align:center;line-height:1.1;">OFFICIAL<br>SEAL</span></div>`}
     </div>
-    <div style="background:${t.dark};padding:4px;text-align:center;">
-      <div style="font-size:11px;color:rgba(255,255,255,0.75);font-weight:600;letter-spacing:0.3px;">✦ Powered by Abu Zayd Solutions · www.abuzaydsolutions.com</div>
+    <div style="background:${t.dark};padding:3px;text-align:center;">
+      <div style="font-size:${S.tiny};color:rgba(255,255,255,0.8);font-weight:600;letter-spacing:0.3px;">✦ Powered by Abu Zayd Solutions · www.abuzaydsolutions.com</div>
     </div>
   </div>`;
 }
@@ -1625,7 +1673,7 @@ function scaleCertPreview() {
     wrapper.getBoundingClientRect().width || (window.innerWidth - sidebarW - pagePad),
     window.innerWidth - sidebarW - pagePad
   );
-  const certW = 900;
+  const certW = 800;
   const scale = Math.min(availW / certW, 1); // never scale up, only down
   child.style.width = certW + 'px';
   child.style.transform = 'scale(' + scale + ')';
@@ -1676,16 +1724,16 @@ async function downloadCert() {
   btn.disabled = true;
   try {
     const target = document.getElementById('cert-download-target');
-    target.style.width = '1100px';
+    target.style.width = '2400px';
     target.style.height = 'auto';
     const data = getFormData();
     data.certId = generatedCertId;
     renderCertificate(target, data, currentCertType, currentCertStyle);
-    await new Promise(r => setTimeout(r, 300));
+    await new Promise(r => setTimeout(r, 400));
     const certEl = target.firstElementChild;
     if (!certEl) { showToast('⚠ Could not find certificate element.'); return; }
     const canvas = await html2canvas(certEl, {
-      scale: 2, useCORS: true, backgroundColor: '#ffffff', logging: false,
+      scale: 3, useCORS: true, backgroundColor: '#ffffff', logging: false,
       width: certEl.offsetWidth, height: certEl.offsetHeight,
     });
     const link = document.createElement('a');
@@ -1714,15 +1762,15 @@ async function shareWhatsApp() {
 
     // Render at full quality in hidden target
     const target = document.getElementById('cert-download-target');
-    target.style.width = '1100px';
+    target.style.width = '2400px';
     target.style.height = 'auto';
     renderCertificate(target, data, currentCertType, currentCertStyle);
-    await new Promise(r => setTimeout(r, 300));
+    await new Promise(r => setTimeout(r, 400));
     const certEl = target.firstElementChild;
     if (!certEl) throw new Error('No cert element');
 
     const canvas = await html2canvas(certEl, {
-      scale: 2, useCORS: true, backgroundColor: '#ffffff', logging: false,
+      scale: 3, useCORS: true, backgroundColor: '#ffffff', logging: false,
       width: certEl.offsetWidth, height: certEl.offsetHeight,
     });
     target.innerHTML = '';
@@ -1806,4 +1854,4 @@ window.addEventListener('DOMContentLoaded', () => {
 </script>
 
 </body>
-  </html>
+</html>
